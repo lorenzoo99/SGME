@@ -1,7 +1,7 @@
 ﻿using SGME.Model;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApplication2.Model
+namespace SGME.Model
 {
     public class User
     {
@@ -20,7 +20,7 @@ namespace WebApplication2.Model
 
         public virtual required UserType UserType { get; set; }
 
-       
+        public virtual required Record Record { get; set; }
 
     }
 }
