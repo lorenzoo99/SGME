@@ -13,7 +13,7 @@ namespace WebApplication2.Context
         public DbSet<User> Users{ get; set; }
         public DbSet<UserType> UserTypes { get; set; }
         public DbSet<Record> Records { get; set; }
-
+        public DbSet<Comments> Comment { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

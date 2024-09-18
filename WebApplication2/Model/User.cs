@@ -18,6 +18,8 @@ namespace SGME.Model
 
         public required DateTime Date { get; set; }
 
+        public bool IsDeleted { get; set; } = false;
+
         public virtual required UserType UserType { get; set; }
 
         public virtual required Record Record { get; set; }
