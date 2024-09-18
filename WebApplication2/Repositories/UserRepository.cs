@@ -1,4 +1,4 @@
-﻿using WebApplication2.Model;
+﻿using SGME.Model;
 
 namespace SGME.Repositories
 {
