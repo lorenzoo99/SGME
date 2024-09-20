@@ -14,13 +14,10 @@ namespace SGME.Model
 
         public required string Password { get; set; }
 
-        public required string UserState { get; set; }
-
         public required DateTime Date { get; set; }
 
         public virtual required UserType UserType { get; set; }
 
-        public virtual required Record Record { get; set; }
-
+        public required ICollection<ContentUsers> ContentUsers { get; set; }
     }
 }
