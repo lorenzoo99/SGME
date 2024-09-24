@@ -17,7 +17,6 @@ namespace SGME.Model
         public required DateTime CommentDate { get; set; }
 
         public required DateTime Modified { get; set; }
-
-    
+        public bool IsDeleted { get; internal set; }
     }
 }

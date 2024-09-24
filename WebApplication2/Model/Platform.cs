@@ -8,5 +8,6 @@
 
         // Navigation property for related Contents
         public ICollection<Content> Contents { get; set; }
+        public bool IsDeleted { get; internal set; }
     }
 }

@@ -5,7 +5,7 @@ namespace SGME.Model
     public class PermissionPerUserType
     {
         // Composite Primary Key
-        public int UserTypeID { get; set; }
+        public int PermissionPerUserTypeID { get; set; }
         public required UserType UserType { get; set; }  // Navigation property
 
         public int PermissionID { get; set; }

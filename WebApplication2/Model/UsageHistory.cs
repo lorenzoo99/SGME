@@ -13,5 +13,7 @@
         // Foreign key to Content
         public int ContentID { get; set; }
         public virtual required Content Content { get; set; }  // Navigation property
+        public int UsageHistoryId { get; internal set; }
+        public bool IsDeleted { get; internal set; }
     }
 }
