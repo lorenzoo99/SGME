@@ -1,7 +1,7 @@
 ﻿using SGME.Model;
 
 
-    public interface IUserRepository
+    public interface IUserService
     {
         Task<IEnumerable<User>> GetAllUserAsync();
         Task<User> GetUserByIdSync(int id);
@@ -10,11 +10,11 @@
         Task SoftDeleteUser(int id);
     }
 
-public class UserRepository : IUserRepository
+public class UserService : IUserService
 
 
 {
-    public UserRepository()
+    public UserService()
     {
         
     }
