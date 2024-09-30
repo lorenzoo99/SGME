@@ -1,47 +1,66 @@
-﻿using SGME.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using SGME.Model;
+using WebApplication2.Context;
 
 namespace SGME.Repositories
 {
     public interface IUserRepository
     {
-        Task<IEnumerable<User>> GetAllUserAsync();
+        Task<IEnumerable<User>> GetAllUsersAsync();
         Task<User> GetUserByIdAsync(int id);
         Task CreateUserAsync(User user);
         Task UpdateUserAsync(User user);
-        Task SoftDeleteUserAsync(int id);
-
-
+        Task DeleteUserAsync(int id);
     }
 
     public class UserRepository : IUserRepository
     {
-        public UserRepository()
+        private readonly TestContext _context;
+
+        public UserRepository(TestContext context)
         {
-            
-        }
-        public Task CreateUserAsync(User user)
-        {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<IEnumerable<User>> GetAllUserAsync()
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Users
+                .Where(u => !u.IsDeleted) // Excluye los eliminados
+                .ToListAsync();
         }
 
-        public Task<User> GetUserByIdAsync(int id)
+        public async Task<User> GetUserByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.UserId == id && !u.IsDeleted);
         }
 
-        public Task SoftDeleteUserAsync(int id)
+        public async Task CreateUserAsync(User user)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw; // Manejo de excepción opcional
+            }
         }
 
-        public Task UpdateUserAsync(User user)
+        public async Task UpdateUserAsync(User user)
         {
-            throw new NotImplementedException();
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteUserAsync(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user != null)
+            {
+                user.IsDeleted = true; // Soft delete
+                await _context.SaveChangesAsync();
+            }
         }
     }
-}
