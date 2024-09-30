@@ -6,11 +6,16 @@ public interface IContentService
     Task<Content> GetContentByIdAsync(int id);
     Task CreateContentAsync(Content content);
     Task UpdateContentAsync(Content content);
+
     Task DeleteContentAsync(int id);
+
+    Task SoftDeleteContentAsync(int id);
+
 }
 
 public class ContentService : IContentService
 {
+
     private readonly IContentRepository _contentRepository;
 
     public ContentService(IContentRepository contentRepository)
@@ -41,6 +46,33 @@ public class ContentService : IContentService
     public async Task DeleteContentAsync(int id)
     {
         await _contentRepository.DeleteContentAsync(id);
+    }
+}
+
+
+    public Task CreateContentAsync(Content content)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Content>> GetAllContentAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Content> GetContentByIdAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task SoftDeleteContentAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateContentAsync(Content content)
+    {
+        throw new NotImplementedException();
     }
 }
 

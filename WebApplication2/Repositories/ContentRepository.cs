@@ -1,6 +1,10 @@
+
 ﻿using Microsoft.EntityFrameworkCore;
 using SGME.Model;
 using WebApplication2.Context;
+=======
+
+
 
 public interface IContentRepository
 {
@@ -8,11 +12,16 @@ public interface IContentRepository
     Task<Content> GetContentByIdAsync(int id);
     Task CreateContentAsync(Content content);
     Task UpdateContentAsync(Content content);
+
     Task DeleteContentAsync(int id);
+
+    Task SoftDeleteContentAsync(int id);
+
 }
 
 public class ContentRepository : IContentRepository
 {
+
     private readonly TestContext _context;
 
     public ContentRepository(TestContext context)
@@ -62,3 +71,30 @@ public class ContentRepository : IContentRepository
         }
     }
 }
+
+    public Task CreateContentAsync(Content content)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Content>> GetAllContentAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Content> GetContentByIdAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task SoftDeleteContentAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateContentAsync(Content content)
+    {
+        throw new NotImplementedException();
+    }
+}
+
