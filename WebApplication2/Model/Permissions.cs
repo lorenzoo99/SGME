@@ -8,6 +8,6 @@
 
             // Navigation property for related UserTypes
             public virtual required ICollection<PermissionPerUserType> PermissionPerUserTypes { get; set; }
-
+        public bool IsDeleted { get; internal set; }
     }
 }

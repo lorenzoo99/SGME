@@ -7,7 +7,7 @@ namespace SGME.Model
     {
         [Key]
 
-        public int Id { get; set; }  // Primary Key
+        public int UserTypeId { get; set; }  // Primary Key
         public required string Name { get; set; }
         public required string UserTypeName { get; set; }  // Name of the user type
         public required string UserTypeDescription { get; set; }  // Description of the user type
@@ -19,9 +19,7 @@ namespace SGME.Model
         public int Id { get; set; }
 
         public required string Name { get; set; }
-
-        
-
+        public bool IsDeleted { get; internal set; }
     }
 
 }
