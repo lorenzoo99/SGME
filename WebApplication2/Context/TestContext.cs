@@ -13,19 +13,12 @@ namespace WebApplication2.Context
 
         public DbSet<User> Users{ get; set; }
         public DbSet<UserType> UserTypes { get; set; }
-
         public DbSet<PermissionPerUserType> PermissionPerUserTypes { get; set; }
         public DbSet<Permissions> Permissions { get; set; }
         public DbSet<Platform> Platforms { get; set; }
-        public DbSet<UsageHistory> UsageHistorys { get; set; }
+        public DbSet<UsageHistory> UsageHistories { get; set; }
         public DbSet<Content> Contents { get; set; }
         public DbSet<ContentUser> ContentUsers { get; set; } 
-
-
-
-
-        public DbSet<Record> Records { get; set; }
-        public DbSet<Comments> Comment { get; set; }
        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -45,7 +38,7 @@ namespace WebApplication2.Context
                 .HasKey(pl => pl.PlatformID );
 
             modelBuilder.Entity<UsageHistory>()
-                .HasKey(uh => uh.HistoryID);
+                .HasKey(uh => uh.UsageHistoryID);
 
             modelBuilder.Entity<Content>()
                 .HasKey(c => c.ContentID);
@@ -69,11 +62,9 @@ namespace WebApplication2.Context
                 .WithMany( u => u.ContentUsers)
                 .HasForeignKey(cu => cu.UserID);
           
-                
-
 
             modelBuilder.Entity<ContentUser>()
-                .HasOne(cu => cu.Content)
+                .HasOne(cu => cu.Contents)
                 .WithMany(c => c.ContentUsers)
                 .HasForeignKey(cu => cu.ContentID);
         

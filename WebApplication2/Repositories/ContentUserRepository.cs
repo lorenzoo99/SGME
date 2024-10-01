@@ -6,11 +6,12 @@ using WebApplication2.Context;
 public interface IContentUserRepository
     {
         Task<IEnumerable<ContentUser>> GetAllContentUsersAsync();
-        Task<ContentUser> GetContentUserByIdAsync(int id);
-        Task CreateContentUserAsync(ContentUser contentUser);
-        Task UpdateContentUserAsync(ContentUser contentUser);
-        Task DeleteContentUserAsync(int id);
-    }
+        Task<ContentUser> GetContentUserByIdAsync(int ContentUserId);
+        Task CreateContentUserAsync(string InteractionStatus, ContentUser contentUser);
+        Task UpdateContentUserAsync(int ContentUserId, string InteractionStatus, ContentUser contentUser);
+        Task DeleteContentUserAsync(int ContentUserId);
+    
+}
 
     public class ContentUserRepository : IContentUserRepository
     {
@@ -28,13 +29,13 @@ public interface IContentUserRepository
             .ToListAsync();
         }
 
-        public async Task<ContentUser> GetContentUserByIdAsync(int id)
+        public async Task<ContentUser> GetContentUserByIdAsync(int ContentUserId)
         {
             return await _context.ContentUsers
-                .FirstOrDefaultAsync(cu => cu.ContentUserID == id && !cu.IsDeleted);
+                .FirstOrDefaultAsync(cu => cu.ContentUserID == ContentUserId && !cu.IsDeleted);
         }
 
-        public async Task CreateContentUserAsync(ContentUser contentUser)
+        public async Task CreateContentUserAsync(string InteractionStatus, ContentUser contentUser)
         {
             try
             {
@@ -47,15 +48,15 @@ public interface IContentUserRepository
             }
         }
 
-        public async Task UpdateContentUserAsync(ContentUser contentUser)
+        public async Task UpdateContentUserAsync(int ContentUserId, string InteractionStatus, ContentUser contentUser)
         {
             _context.ContentUsers.Update(contentUser);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteContentUserAsync(int id)
+        public async Task DeleteContentUserAsync(int ContentUserId)
         {
-            var contentUser = await _context.ContentUsers.FindAsync(id);
+            var contentUser = await _context.ContentUsers.FindAsync(ContentUserId);
             if (contentUser != null)
             {
                 contentUser.IsDeleted = true; // Soft delete

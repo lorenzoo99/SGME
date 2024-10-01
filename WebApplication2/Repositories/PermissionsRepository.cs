@@ -9,15 +9,11 @@ public interface IPermissionsRepository
 {
     Task<IEnumerable<Permissions>> GetAllPermissionsAsync();
 
-    Task<Permissions> GetPermissionByIdAsync(int id);
-    Task CreatePermissionAsync(Permissions permission);
-    Task UpdatePermissionAsync(Permissions permission);
-    Task DeletePermissionAsync(int id);
-
-    Task<Permissions> GetPermissionsByIdAsync(int id);
-    Task CreatePermissionsAsync(Permissions permissions);
-    Task UpdatePermissionsAsync(Permissions permissions);
-    Task SoftDeletePermissionsAsync(int id);
+    Task<Permissions> GetPermissionsByIdAsync(int PermissionsId);
+    Task CreatePermissionsAsync(string PermissionName, string PermissionDescription, Permissions permissions);
+    Task UpdatePermissionsAsync(int PermissionsId, string PermissionName, string PermissionDescription, Permissions permissions);
+    Task DeletePermissionsAsync(int PermissionsId);
+   
 
 }
 
@@ -38,17 +34,17 @@ public class PermissionsRepository : IPermissionsRepository
             .ToListAsync();
     }
 
-    public async Task<Permissions> GetPermissionByIdAsync(int id)
+    public async Task<Permissions> GetPermissionsByIdAsync(int PermissionsId)
     {
         return await _context.Permissions
-            .FirstOrDefaultAsync(p => p.PermissionID == id && !p.IsDeleted);
+            .FirstOrDefaultAsync(p => p.PermissionID == PermissionsId && !p.IsDeleted);
     }
 
-    public async Task CreatePermissionAsync(Permissions permission)
+    public async Task CreatePermissionsAsync(string PermissionName, string PermissionDescription, Permissions permissions)
     {
         try
         {
-            await _context.Permissions.AddAsync(permission);
+            await _context.Permissions.AddAsync(permissions);
             await _context.SaveChangesAsync();
         }
         catch (Exception e)
@@ -57,44 +53,23 @@ public class PermissionsRepository : IPermissionsRepository
         }
     }
 
-    public async Task UpdatePermissionAsync(Permissions permission)
+    public async Task UpdatePermissionsAsync(int PermissionsId, string PermissionName, string PermissionDescription, Permissions permissions)
     {
-        _context.Permissions.Update(permission);
+        _context.Permissions.Update(permissions);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeletePermissionAsync(int id)
+    public async Task DeletePermissionsAsync(int PermissionsId)
     {
-        var permission = await _context.Permissions.FindAsync(id);
-        if (permission != null)
+        var permissions = await _context.Permissions.FindAsync(PermissionsId);
+        if (permissions != null)
         {
-            permission.IsDeleted = true; // Soft delete
+            permissions.IsDeleted = true; // Soft delete
             await _context.SaveChangesAsync();
         }
 
-    public Task CreatePermissionsAsync(Permissions permissions)
-    {
-        throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Permissions>> GetAllPermissionsAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Permissions> GetPermissionsByIdAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task SoftDeletePermissionsAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task UpdatePermissionsAsync(Permissions permissions)
-    {
-        throw new NotImplementedException();
-
-    }
+    
+    
 }

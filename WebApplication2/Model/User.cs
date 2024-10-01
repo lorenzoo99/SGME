@@ -21,9 +21,7 @@ namespace SGME.Model
         public virtual required UserType UserType { get; set; }
 
 
-        public required ICollection<ContentUsers> ContentUsers { get; set; }
-=======
-        public virtual required Record Record { get; set; }
+        public required ICollection<ContentUser> ContentUsers { get; set; }
 
 
     }

@@ -6,10 +6,10 @@ using WebApplication2.Context;
 public interface IPlatformRepository
 {
     Task<IEnumerable<Platform>> GetAllPlatformsAsync();
-    Task<Platform> GetPlatformByIdAsync(int id);
-    Task CreatePlatformAsync(Platform platform);
-    Task UpdatePlatformAsync(Platform platform);
-    Task DeletePlatformAsync(int id);
+    Task<Platform> GetPlatformByIdAsync(int PlatformId);
+    Task CreatePlatformAsync(string PlatformName, string PlatformDescription, Platform platform);
+    Task UpdatePlatformAsync(int PlatformId, string PlatformName, string PlatformDescription, Platform platform);
+    Task DeletePlatformAsync(int PlatformId);
 }
 
 public class PlatformRepository : IPlatformRepository
@@ -28,13 +28,13 @@ public class PlatformRepository : IPlatformRepository
             .ToListAsync();
     }
 
-    public async Task<Platform> GetPlatformByIdAsync(int id)
+    public async Task<Platform> GetPlatformByIdAsync(int PlatformId)
     {
         return await _context.Platforms
-            .FirstOrDefaultAsync(p => p.PlatformID == id && !p.IsDeleted);
+            .FirstOrDefaultAsync(p => p.PlatformID == PlatformId && !p.IsDeleted);
     }
 
-    public async Task CreatePlatformAsync(Platform platform)
+    public async Task CreatePlatformAsync(string PlatformName, string PlatformDescription, Platform platform)
     {
         try
         {
@@ -47,15 +47,15 @@ public class PlatformRepository : IPlatformRepository
         }
     }
 
-    public async Task UpdatePlatformAsync(Platform platform)
+    public async Task UpdatePlatformAsync(int PlatformId, string PlatformName, string PlatformDescription, Platform platform)
     {
         _context.Platforms.Update(platform);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeletePlatformAsync(int id)
+    public async Task DeletePlatformAsync(int PlatformId)
     {
-        var platform = await _context.Platforms.FindAsync(id);
+        var platform = await _context.Platforms.FindAsync(PlatformId);
         if (platform != null)
         {
             platform.IsDeleted = true; // Soft delete
@@ -63,43 +63,5 @@ public class PlatformRepository : IPlatformRepository
         }
     }
 }
-=======
-﻿using SGME.Model;
 
-public interface IPlatformRepository
-    {
-        Task<IEnumerable<Platform>> GetAllPlatformAsync();
-        Task<Platform> GetPlatformByIdAsync(int id);
-        Task CreatePlatformAsync(Platform platform);
-        Task UpdatePlatformAsync(Platform platform);
-        Task SoftDeletePlatformAsync(int id);
-    }
-
-    public class PlatformRepository : IPlatformRepository
-    {
-        public Task CreatePlatformAsync(Platform platform)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Platform>> GetAllPlatformAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Platform> GetPlatformByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task SoftDeletePlatformAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdatePlatformAsync(Platform platform)
-        {
-            throw new NotImplementedException();
-        }
-    }
 
