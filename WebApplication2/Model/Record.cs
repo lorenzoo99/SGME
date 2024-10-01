@@ -16,9 +16,6 @@ namespace SGME.Model
         public required string ReferenceId { get; set; }
 
         public required DateTime Date { get; set; }
-
-        
-
-
+        public bool IsDeleted { get; internal set; }
     }
 }
