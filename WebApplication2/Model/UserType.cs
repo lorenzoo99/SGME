@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using SGME.Model;
 
-namespace SGME.Model
-{
+
+
     public class UserType
     {
         [Key]
@@ -17,9 +17,7 @@ namespace SGME.Model
         public virtual required ICollection<PermissionPerUserType> PermissionPerUserType { get; set; }
 
         public int Id { get; set; }
-
-        public required string Name { get; set; }
         public bool IsDeleted { get; internal set; }
     }
 
-}
+

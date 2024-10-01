@@ -1,13 +1,16 @@
-﻿namespace SGME.Repositories
+﻿namespace SGME.Services;
+
 using SGME.Model;
+using SGME.Repositories;
+
 public interface ICommentsService
-    {
-        Task<IEnumerable<Comments>> GetAllCommentsAsync();
-        Task<Comments> GetCommentByIdAsync(int id);
-        Task CreateCommentAsync(Comments comment);
-        Task UpdateCommentAsync(Comments comment);
-        Task DeleteCommentAsync(int id);
-    }
+{
+    Task<IEnumerable<Comments>> GetAllCommentsAsync();
+    Task<Comments> GetCommentByIdAsync(int CommentsId);
+    Task CreateCommentAsync(Comments comment);
+    Task UpdateCommentAsync(Comments comment);
+    Task DeleteCommentAsync(int CommentsId);
+}
 
 public class CommentsService : ICommentsService
 {
@@ -23,9 +26,9 @@ public class CommentsService : ICommentsService
         return await _commentsRepository.GetAllCommentsAsync();
     }
 
-    public async Task<Comments> GetCommentByIdAsync(int id)
+    public async Task<Comments> GetCommentByIdAsync(int CommentsId)
     {
-        return await _commentsRepository.GetCommentByIdAsync(id);
+        return await _commentsRepository.GetCommentByIdAsync(CommentsId);
     }
 
     public async Task CreateCommentAsync(Comments comment)
@@ -38,8 +41,8 @@ public class CommentsService : ICommentsService
         await _commentsRepository.UpdateCommentAsync(comment);
     }
 
-    public async Task DeleteCommentAsync(int id)
+    public async Task DeleteCommentAsync(int CommentsId)
     {
-        await _commentsRepository.DeleteCommentAsync(id);
+        await _commentsRepository.DeleteCommentAsync(CommentsId);
     }
 }

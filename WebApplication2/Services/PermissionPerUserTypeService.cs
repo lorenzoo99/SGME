@@ -1,14 +1,14 @@
 ﻿using SGME.Model;
 
-namespace SGME.Repositories
+namespace SGME.Services
 {
     public interface IPermissionPerUserTypeService
     {
         Task<IEnumerable<PermissionPerUserType>> GetAllPermissionsPerUserTypeAsync();
-        Task<PermissionPerUserType> GetPermissionPerUserTypeByIdAsync(int userTypeId, int permissionId);
+        Task<PermissionPerUserType> GetPermissionPerUserTypeByIdAsync(int UserTypeId, int PermissionPerUserTypeId);
         Task CreatePermissionPerUserTypeAsync(PermissionPerUserType permissionPerUserType);
         Task UpdatePermissionPerUserTypeAsync(PermissionPerUserType permissionPerUserType);
-        Task DeletePermissionPerUserTypeAsync(int userTypeId, int permissionId);
+        Task DeletePermissionPerUserTypeAsync(int UserTypeId, int PermissionPerUserTypeId);
     }
 
     public class PermissionPerUserTypeService : IPermissionPerUserTypeService
@@ -25,9 +25,9 @@ namespace SGME.Repositories
             return await _permissionPerUserTypeRepository.GetAllPermissionsPerUserTypeAsync();
         }
 
-        public async Task<PermissionPerUserType> GetPermissionPerUserTypeByIdAsync(int userTypeId, int permissionId)
+        public async Task<PermissionPerUserType> GetPermissionPerUserTypeByIdAsync(int UserTypeId, int PermissionPerUserTypeId)
         {
-            return await _permissionPerUserTypeRepository.GetPermissionPerUserTypeByIdAsync(userTypeId, permissionId);
+            return await _permissionPerUserTypeRepository.GetPermissionPerUserTypeByIdAsync(UserTypeId, PermissionPerUserTypeId);
         }
 
         public async Task CreatePermissionPerUserTypeAsync(PermissionPerUserType permissionPerUserType)
@@ -40,9 +40,9 @@ namespace SGME.Repositories
             await _permissionPerUserTypeRepository.UpdatePermissionPerUserTypeAsync(permissionPerUserType);
         }
 
-        public async Task DeletePermissionPerUserTypeAsync(int userTypeId, int permissionId)
+        public async Task DeletePermissionPerUserTypeAsync(int UserTypeId, int PermissionPerUserTypeId)
         {
-            await _permissionPerUserTypeRepository.DeletePermissionPerUserTypeAsync(userTypeId, permissionId);
+            await _permissionPerUserTypeRepository.DeletePermissionPerUserTypeAsync(UserTypeId, PermissionPerUserTypeId);
         }
     }
 }

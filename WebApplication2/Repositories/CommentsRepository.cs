@@ -7,10 +7,10 @@ namespace SGME.Repositories
     public interface ICommentsRepository
     {
         Task<IEnumerable<Comments>> GetAllCommentsAsync();
-        Task<Comments> GetCommentByIdAsync(int id);
+        Task<Comments> GetCommentByIdAsync(int CommentsId);
         Task CreateCommentAsync(Comments comment);
         Task UpdateCommentAsync(Comments comment);
-        Task DeleteCommentAsync(int id);
+        Task DeleteCommentAsync(int CommentsId);
     }
 
     public class CommentsRepository : ICommentsRepository
@@ -29,10 +29,10 @@ namespace SGME.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Comments> GetCommentByIdAsync(int id)
+        public async Task<Comments> GetCommentByIdAsync(int CommentsId)
         {
             return await _context.Comment
-                .FirstOrDefaultAsync(c => c.CommentsId == id && !c.IsDeleted);
+                .FirstOrDefaultAsync(c => c.CommentsId == CommentsId && !c.IsDeleted);
         }
 
         public async Task CreateCommentAsync(Comments comment)
@@ -54,9 +54,9 @@ namespace SGME.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteCommentAsync(int id)
+        public async Task DeleteCommentAsync(int CommentsId)
         {
-            var comment = await _context.Comment.FindAsync(id);
+            var comment = await _context.Comment.FindAsync(CommentsId);
             if (comment != null)
             {
                 comment.IsDeleted = true; // Soft delete
