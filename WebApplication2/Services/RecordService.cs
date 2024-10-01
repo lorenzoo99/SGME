@@ -3,17 +3,12 @@
 public interface IRecordService
 {
 
-    Task<IEnumerable<Record>> GetAllRecordsAsync();
-    Task<Record> GetRecordByIdAsync(int id);
-    Task CreateRecordAsync(Record record);
-    Task UpdateRecordAsync(Record record);
-    Task DeleteRecordAsync(int id);
 
     Task<IEnumerable<Record>> GetAllRecordAsync();
-    Task<Record> GetRecordByIdAsync(int id);
+    Task<Record> GetRecordByIdAsync(int RecordId);
     Task CreateRecordAsync(Record record);
     Task UpdateRecordAsync(Record record);
-    Task SoftDeleteRecordAsync(int id);
+    Task SoftDeleteRecordAsync(int RecordId);
 
 }
 
@@ -32,9 +27,9 @@ public class RecordService : IRecordService
         return await _recordRepository.GetAllRecordsAsync();
     }
 
-    public async Task<Record> GetRecordByIdAsync(int id)
+    public async Task<Record> GetRecordByIdAsync(int RecordId)
     {
-        return await _recordRepository.GetRecordByIdAsync(id);
+        return await _recordRepository.GetRecordByIdAsync(RecordId);
     }
 
     public async Task CreateRecordAsync(Record record)
@@ -47,33 +42,16 @@ public class RecordService : IRecordService
         await _recordRepository.UpdateRecordAsync(record);
     }
 
-    public async Task DeleteRecordAsync(int id)
+    public async Task SoftDeleteRecordAsync(int RecordId)
     {
-        await _recordRepository.DeleteRecordAsync(id);
-
-    public Task CreateRecordAsync(Record record)
-    {
-        throw new NotImplementedException();
+        await _recordRepository.SoftDeleteRecordAsync(RecordId);
     }
 
     public Task<IEnumerable<Record>> GetAllRecordAsync()
     {
         throw new NotImplementedException();
     }
-
-    public Task<Record> GetRecordByIdAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task SoftDeleteRecordAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task UpdateRecordAsync(Record record)
-    {
-        throw new NotImplementedException();
-
-    }
 }
+
+
+   

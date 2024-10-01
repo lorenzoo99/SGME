@@ -1,14 +1,16 @@
 ﻿using SGME.Model;
+using SGME.Repositories;
 
-namespace SGME.Repositories
+namespace SGME.Services
 {
     public interface IUsageHistoryService
     {
-        Task<IEnumerable<UsageHistory>> GetAllUsageHistoriesAsync();
-        Task<UsageHistory> GetUsageHistoryByIdAsync(int id);
-        Task CreateUsageHistoryAsync(UsageHistory usageHistory);
-        Task UpdateUsageHistoryAsync(UsageHistory usageHistory);
+        Task<IEnumerable<UserType>> GetAllUsageHistoriesAsync();
+        Task<UserType> GetUsageHistoryByIdAsync(int id);
+        Task CreateUsageHistoryAsync(UserType usageHistory);
+        Task UpdateUsageHistoryAsync(UserType usageHistory);
         Task DeleteUsageHistoryAsync(int id);
+
     }
 
     public class UsageHistoryService : IUsageHistoryService
@@ -20,22 +22,22 @@ namespace SGME.Repositories
             _usageHistoryRepository = usageHistoryRepository;
         }
 
-        public async Task<IEnumerable<UsageHistory>> GetAllUsageHistoriesAsync()
+        public async Task<IEnumerable<UserType>> GetAllUsageHistoriesAsync()
         {
             return await _usageHistoryRepository.GetAllUsageHistoriesAsync();
         }
 
-        public async Task<UsageHistory> GetUsageHistoryByIdAsync(int id)
+        public async Task<UserType> GetUsageHistoryByIdAsync(int id)
         {
             return await _usageHistoryRepository.GetUsageHistoryByIdAsync(id);
         }
 
-        public async Task CreateUsageHistoryAsync(UsageHistory usageHistory)
+        public async Task CreateUsageHistoryAsync(UserType usageHistory)
         {
             await _usageHistoryRepository.CreateUsageHistoryAsync(usageHistory);
         }
 
-        public async Task UpdateUsageHistoryAsync(UsageHistory usageHistory)
+        public async Task UpdateUsageHistoryAsync(UserType usageHistory)
         {
             await _usageHistoryRepository.UpdateUsageHistoryAsync(usageHistory);
         }
@@ -44,5 +46,6 @@ namespace SGME.Repositories
         {
             await _usageHistoryRepository.DeleteUsageHistoryAsync(id);
         }
+
     }
 }
