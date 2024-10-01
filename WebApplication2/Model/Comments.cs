@@ -5,7 +5,7 @@ namespace SGME.Model
 {
     public class Comments
     {
-        [Key]
+        
         public int CommentsId { get; set; }
 
         public required int UserId { get; set; }

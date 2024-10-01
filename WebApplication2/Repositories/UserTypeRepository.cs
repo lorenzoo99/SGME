@@ -11,6 +11,7 @@ namespace SGME.Repositories
         Task CreateUserTypeAsync(UserType userType);
         Task UpdateUserTypeAsync(UserType userType);
         Task DeleteUserTypeAsync(int id);
+        Task SoftDeleteUserTypeAsync(int userTypeId);
     }
 
     public class UserTypeRepository : IUserTypeRepository
@@ -25,14 +26,14 @@ namespace SGME.Repositories
         public async Task<IEnumerable<UserType>> GetAllUserTypesAsync()
         {
             return await _context.UserTypes
-                .Where(ut => !ut.IsDeleted) // Excluye los eliminados
+                .Where(ut => !ut.IsDeleted)
                 .ToListAsync();
         }
 
         public async Task<UserType> GetUserTypeByIdAsync(int id)
         {
             return await _context.UserTypes
-                .FirstOrDefaultAsync(ut => ut.UserTypeId == id && !ut.IsDeleted);
+                .FirstOrDefaultAsync(ut => ut.Id == id && !ut.IsDeleted);
         }
 
         public async Task CreateUserTypeAsync(UserType userType)
@@ -62,6 +63,11 @@ namespace SGME.Repositories
                 userType.IsDeleted = true; // Soft delete
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public Task SoftDeleteUserTypeAsync(int userTypeId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

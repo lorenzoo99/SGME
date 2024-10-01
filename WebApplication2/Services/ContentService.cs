@@ -1,14 +1,12 @@
 ﻿using SGME.Model;
-
+namespace SGME.Services;
 public interface IContentService
 {
     Task<IEnumerable<Content>> GetAllContentAsync();
     Task<Content> GetContentByIdAsync(int id);
     Task CreateContentAsync(Content content);
     Task UpdateContentAsync(Content content);
-
     Task DeleteContentAsync(int id);
-
     Task SoftDeleteContentAsync(int id);
 
 }
@@ -47,32 +45,11 @@ public class ContentService : IContentService
     {
         await _contentRepository.DeleteContentAsync(id);
     }
-}
-
-
-    public Task CreateContentAsync(Content content)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<Content>> GetAllContentAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Content> GetContentByIdAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
 
     public Task SoftDeleteContentAsync(int id)
     {
         throw new NotImplementedException();
     }
 
-    public Task UpdateContentAsync(Content content)
-    {
-        throw new NotImplementedException();
-    }
 }
 
