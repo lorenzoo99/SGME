@@ -13,19 +13,15 @@ namespace WebApplication2.Context
 
         public DbSet<User> Users{ get; set; }
         public DbSet<UserType> UserTypes { get; set; }
-
         public DbSet<PermissionPerUserType> PermissionPerUserTypes { get; set; }
         public DbSet<Permissions> Permissions { get; set; }
         public DbSet<Platform> Platforms { get; set; }
-        public DbSet<UsageHistory> UsageHistory { get; set; }
+        public DbSet<UsageHistory> UsageHistorys { get; set; }
         public DbSet<Content> Contents { get; set; }
-        public DbSet<ContentUsers> ContentUsers { get; set; } 
-
-
-
+        public DbSet<ContentUser> ContentUsers { get; set; } 
         public DbSet<Record> Records { get; set; }
         public DbSet<Comments> Comment { get; set; }
- 
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -59,20 +55,18 @@ namespace WebApplication2.Context
                 .WithMany(p => p.PermissionPerUserTypes)
                 .HasForeignKey(pt => pt.PermissionID);
 
-            modelBuilder.Entity<ContentUsers>()
+            modelBuilder.Entity<ContentUser>()
                 .HasKey(cu => cu.ContentUserID);
 
             // Configurar relaciones en el modelo
-            modelBuilder.Entity<ContentUsers>()
+            modelBuilder.Entity<ContentUser>()
                 .HasOne(cu => cu.User)
                 .WithMany( u => u.ContentUsers)
                 .HasForeignKey(cu => cu.UserID);
           
-                
 
-
-            modelBuilder.Entity<ContentUsers>()
-                .HasOne(cu => cu.Content)
+            modelBuilder.Entity<ContentUser>()
+                .HasOne(cu => cu.Contents)
                 .WithMany(c => c.ContentUsers)
                 .HasForeignKey(cu => cu.ContentID);
         

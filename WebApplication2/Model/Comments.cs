@@ -5,7 +5,7 @@ namespace SGME.Model
 {
     public class Comments
     {
-        [Key]
+        
         public int CommentsId { get; set; }
 
         public required int UserId { get; set; }
@@ -17,7 +17,6 @@ namespace SGME.Model
         public required DateTime CommentDate { get; set; }
 
         public required DateTime Modified { get; set; }
-
-    
+        public bool IsDeleted { get; internal set; }
     }
 }
