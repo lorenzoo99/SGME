@@ -9,6 +9,11 @@ var ConecctString = builder.Configuration.GetConnectionString("Connection");
 
 builder.Services.AddDbContext<TestContext>(options => options.UseSqlServer(ConecctString));
 
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 //Configuration
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -40,11 +45,6 @@ builder.Services.AddScoped<IContentService, ContentService>();
 
 builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
 builder.Services.AddScoped<ICommentsService, CommentsService>();
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
