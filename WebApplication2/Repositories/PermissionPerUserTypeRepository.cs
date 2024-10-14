@@ -5,79 +5,67 @@ using WebApplication2.Context;
 
     public interface IPermissionPerUserTypeRepository
     {
-        Task<IEnumerable<PermissionPerUserType>> GetAllPermissionsPerUserTypeAsync();
-        Task<PermissionPerUserType> GetPermissionPerUserTypeByIdAsync(int userTypeId, int permissionId);
-        Task CreatePermissionPerUserTypeAsync(PermissionPerUserType permissionPerUserType);
-        Task UpdatePermissionPerUserTypeAsync(PermissionPerUserType permissionPerUserType);
+        Task<IEnumerable<PermissionPerUserType>> GetAllPermissionPerUserTypeAsync();
+        Task<PermissionPerUserType> GetPermissionPerUserTypeByIdAsync(int UserTypeId, int PermissionPerUserTypeId);
+        Task CreatePermissionPerUserTypeAsync(int UserTypeID, PermissionPerUserType permissionPerUserType);
+        Task UpdatePermissionPerUserTypeAsync(int UserTypeId, int PermissionPerUserTypeId, PermissionPerUserType permissionPerUserType);
         Task DeletePermissionPerUserTypeAsync(int userTypeId, int permissionId);
     }
 
-    public class PermissionPerUserTypeRepository : IPermissionPerUserTypeRepository
+public class PermissionPerUserTypeRepository : IPermissionPerUserTypeRepository
+{
+    private readonly TestContext _context;
+
+    public PermissionPerUserTypeRepository(TestContext context)
     {
-        private readonly TestContext _context;
+        _context = context;
+    }
 
-        public PermissionPerUserTypeRepository(TestContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<IEnumerable<PermissionPerUserType>> GetAllPermissionsPerUserTypesAsync()
-        {
+    public async Task<IEnumerable<PermissionPerUserType>> GetAllPermissionPerUserTypeAsync()
+    {
         return await _context.PermissionPerUserTypes
             .Where(pput => !pput.IsDeleted) // Excluye los eliminados
             .ToListAsync();
-        }
+    }
 
-        public async Task<PermissionPerUserType> GetPermissionPerUserTypeByIdAsync(int id)
-        {
-            return await _context.PermissionPerUserTypes
-                .FirstOrDefaultAsync(pput => pput.PermissionPerUserTypeID == id && !pput.IsDeleted);
-        }
+    public async Task<PermissionPerUserType> GetPermissionPerUserTypeByIdAsync(int UserTypeId, int PermissionPerUserTypeId)
+    {
+        return await _context.PermissionPerUserTypes
+            .FirstOrDefaultAsync(pput => pput.PermissionPerUserTypeID == PermissionPerUserTypeId && !pput.IsDeleted);
+    }
 
-        public async Task CreatePermissionPerUserTypeAsync(PermissionPerUserType permissionPerUserType)
+    public async Task CreatePermissionPerUserTypeAsync(int UserTypeID, PermissionPerUserType permissionPerUserType)
+    {
+        try
         {
-            try
-            {
-                await _context.PermissionPerUserTypes.AddAsync(permissionPerUserType);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                throw; // Manejo de excepción opcional
-            }
-        }
-
-        public async Task UpdatePermissionPerUserTypeAsync(PermissionPerUserType permissionPerUserType)
-        {
-            _context.PermissionPerUserTypes.Update(permissionPerUserType);
+            await _context.PermissionPerUserTypes.AddAsync(permissionPerUserType);
             await _context.SaveChangesAsync();
         }
-
-        public async Task DeletePermissionPerUserTypeAsync(int id)
+        catch (Exception e)
         {
-            var permissionPerUserType = await _context.PermissionPerUserTypes.FindAsync(id);
-            if (permissionPerUserType != null)
-            {
-                permissionPerUserType.IsDeleted = true; // Soft delete
-                await _context.SaveChangesAsync();
-            }
+            throw; // Manejo de excepción opcional
         }
-
-    public Task<IEnumerable<PermissionPerUserType>> GetAllPermissionsPerUserTypeAsync()
-    {
-        throw new NotImplementedException();
     }
 
-    public Task<PermissionPerUserType> GetPermissionPerUserTypeByIdAsync(int userTypeId, int permissionId)
+    public async Task UpdatePermissionPerUserTypeAsync(int UserTypeId, int PermissionPerUserTypeId, PermissionPerUserType permissionPerUserType)
     {
-        throw new NotImplementedException();
+        _context.PermissionPerUserTypes.Update(permissionPerUserType);
+        await _context.SaveChangesAsync();
     }
 
-    public Task DeletePermissionPerUserTypeAsync(int userTypeId, int permissionId)
+    public async Task DeletePermissionPerUserTypeAsync(int UserTypeId, int PermissionPerUserTypeId)
     {
-        throw new NotImplementedException();
+        var permissionPerUserType = await _context.PermissionPerUserTypes.FindAsync(UserTypeId, PermissionPerUserTypeId);
+        if (permissionPerUserType != null)
+        {
+            permissionPerUserType.IsDeleted = true; // Soft delete
+            await _context.SaveChangesAsync();
+        }
     }
+
+
 }
+
 
 
     

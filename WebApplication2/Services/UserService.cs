@@ -7,11 +7,12 @@ using SGME.Services;
     {
         Task<IEnumerable<User>> GetAllUserAsync();
         Task<User> GetUserByIdSync(int UserId);
-        Task CreateUserAsync(User user);
-        Task UpdateUserAsync (User user);
-        Task SoftDeleteUserAsync(int UserId);
+        Task CreateUserAsync(string Name, string Email, string Password, User user);
+        Task UpdateUserAsync (int UserId, string Name, string Email, string Password, User user);
+        Task DeleteUserAsync(int UserId);
     
 }
+
 
 public class UserService : IUserService
 
@@ -28,28 +29,25 @@ public class UserService : IUserService
         return await _userRepository.GetAllUserAsync();
     }
 
-    public async Task<User> GetUserByIdAsync(int UserId)
+    public async Task<User> GetUserByIdSync(int UserId)
     {
         return await _userRepository.GetUserByIdAsync(UserId);
     }
 
-    public async Task CreateUserAsync(User user)
+    public async Task CreateUserAsync(string Name, string Email, string Password, User user)
     {
-        await _userRepository.CreateUserAsync(user);
+        await _userRepository.CreateUserAsync(Name, Email, Password, user);
     }
 
-    public async Task UpdateUserAsync(User user)
+    public async Task UpdateUserAsync(int UserId, string Name, string Email, string Password, User user)
     {
-        await _userRepository.UpdateUserAsync(user);
+        await _userRepository.UpdateUserAsync(UserId, Name, Email, Password, user);
     }
 
-    public async Task SoftDeleteUserAsync(int UserId)
+    public async Task DeleteUserAsync(int UserId)
     {
-        await _userRepository.SoftDeleteUserAsync(UserId);
+        await _userRepository.DeleteUserAsync(UserId);
     }
 
-    public Task<User> GetUserByIdSync(int UserId)
-    {
-        throw new NotImplementedException();
-    }
+    
 }

@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using SGME.Model;
 using SGME.Services;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
+using System.Security;
 
 namespace SGME.Controllers
 {
@@ -16,13 +19,20 @@ namespace SGME.Controllers
 
             _usageHistoryService = usageHistoryService;
         }
-        public async Task<ActionResult<IEnumerable<UserType>>> GetAllUsageHistory()
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<UsageHistory>>> GetAllUsageHistory()
         {
             var UsageHistory = await _usageHistoryService.GetAllUsageHistoriesAsync();
             return Ok(UsageHistory);
         }
 
-        public async Task<ActionResult<UserType>> GetUsageHistoryById(int UsageHistoryId)
+        [HttpGet("{UsageHistoryId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        public async Task<ActionResult<UsageHistory>> GetUsageHistoryById(int UsageHistoryId)
         {
             var UsageHistory = await _usageHistoryService.GetUsageHistoryByIdAsync(UsageHistoryId);
             if (UsageHistory == null)
@@ -31,37 +41,72 @@ namespace SGME.Controllers
             return Ok(UsageHistory);
         }
 
-        public async Task<ActionResult> CreateUsageHistory([FromBody] UserType usageHistory)
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        public async Task<ActionResult> CreateUsageHistory(int ViewDuration, UsageHistory usageHistory)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            try
+            {
+                await _usageHistoryService.CreateUsageHistoryAsync(ViewDuration, usageHistory);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(404, ex.Message);
+            }
 
-            await _usageHistoryService.CreateUsageHistoryAsync(usageHistory);
-            return CreatedAtAction(nameof(GetUsageHistoryById), new { UsageHistoryId = usageHistory.Id }, usageHistory);
+
+            return StatusCode(StatusCodes.Status201Created, "Usage History created");
         }
 
-        public async Task<ActionResult> UpdateUsageHistory(int UsageHistoryId, [FromBody] UserType usageHistory)
+        [HttpPut("{UsageHistoryId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<ActionResult> UpdateUsageHistory(int UsageHistoryId, int ViewDuration, UsageHistory usageHistory)
         {
-            if (UsageHistoryId != usageHistory.Id)
-                return BadRequest();
-
-            var existingUsageHistory = await _usageHistoryService.GetUsageHistoryByIdAsync(UsageHistoryId);
-            if (existingUsageHistory == null)
+            var existingContentUser = await _usageHistoryService.GetUsageHistoryByIdAsync(UsageHistoryId);
+            if (existingContentUser == null)
                 return NotFound();
+            try
+            {
 
-            await _usageHistoryService.GetUsageHistoryByIdAsync(UsageHistoryId);
-            return NoContent();
+                await _usageHistoryService.UpdateUsageHistoryAsync(UsageHistoryId, ViewDuration, usageHistory);
+                return StatusCode(StatusCodes.Status200OK, ("Updated Successfully"));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(404, e.Message);
+            }
         }
 
-        public async Task<ActionResult> SoftDeleteUsageHistory(int UsageHistoryId)
+        [HttpDelete("{UsageHistoryId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<ActionResult> DeleteUsageHistory(int UsageHistoryId)
         {
-            var UsageHistory = await _usageHistoryService.GetUsageHistoryByIdAsync(UsageHistoryId);
-            if (UsageHistory == null)
+            
+                var Content = await _usageHistoryService.GetUsageHistoryByIdAsync(UsageHistoryId);
+                if (Content == null)
                 return NotFound();
 
-            await _usageHistoryService.GetUsageHistoryByIdAsync(UsageHistoryId);
-            return NoContent();
-
+                try
+                {
+                    await _usageHistoryService.DeleteUsageHistoryAsync(UsageHistoryId);
+                    return StatusCode(StatusCodes.Status200OK, ("Deleted Successfully"));
+                }
+                catch (Exception e)
+                {
+                    return StatusCode(404, e?.Message);
+                }
         }
     }
 }

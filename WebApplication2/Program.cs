@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using SGME.Model;
+using SGME.Repositories;
+using SGME.Services;
 using WebApplication2.Context;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +11,14 @@ var ConecctString = builder.Configuration.GetConnectionString("Connection");
 
 
 builder.Services.AddDbContext<TestContext>(options => options.UseSqlServer(ConecctString));
+
+
+
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 
 //Configuration
 
@@ -41,19 +52,15 @@ builder.Services.AddScoped<IContentService, ContentService>();
 builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
 builder.Services.AddScoped<ICommentsService, CommentsService>();
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseHttpsRedirection();
 

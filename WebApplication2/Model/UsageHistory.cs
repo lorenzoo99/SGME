@@ -2,7 +2,7 @@
 {
     public class UsageHistory
     {
-        public int HistoryID { get; set; }  // Primary Key
+        public int UsageHistoryID { get; set; }  // Primary Key
         public required DateTime ViewDate { get; set; }
         public int ViewDuration { get; set; }  // Time in seconds or minutes
 

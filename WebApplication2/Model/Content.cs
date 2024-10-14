@@ -6,7 +6,7 @@
         public required string Contents { get; set; }
         public required string ContentTitle { get; set; }
         public required string ContentType { get; set; }
-        public required DateTime? PublicationDate { get; set; }
+        public required DateTime PublicationDate { get; set; }
 
         // Foreign key to Platform
         public required int PlatformID { get; set; }

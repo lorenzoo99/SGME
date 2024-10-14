@@ -1,16 +1,18 @@
 ﻿using SGME.Model;
+using System.Security;
 
 public interface IPermissionsService
 {
     Task<IEnumerable<Permissions>> GetAllPermissionsAsync();
-    Task<Permissions> GetPermissionsByIdAsync(int id);
-    Task CreatePermissionsAsync(Permissions permissions);
-    Task UpdatePermissionsAsync(Permissions permissions);
-    Task DeletePermissionsAsync(int id);
+    Task<Permissions> GetPermissionsByIdAsync(int PermissionsId);
+    Task CreatePermissionsAsync(string PermissionName, string PermissionDescription, Permissions permissions);
+    Task UpdatePermissionsAsync(int PermissionsId, string PermissionName, string PermissionDescription, Permissions permissions);
+    Task DeletePermissionsAsync(int PermissionsId);
 
  
     Task SoftDeletePermissionsAsync(int id);
 
+    
 }
 
 public class PermissionsService : IPermissionsService
@@ -28,24 +30,25 @@ public class PermissionsService : IPermissionsService
         return await _permissionsRepository.GetAllPermissionsAsync();
     }
 
-    public async Task<Permissions> GetPermissionsByIdAsync(int id)
+    public async Task<Permissions> GetPermissionsByIdAsync(int PermissionsId)
     {
-        return await _permissionsRepository.GetPermissionsByIdAsync(id);
+        return await _permissionsRepository.GetPermissionsByIdAsync(PermissionsId);
     }
 
-    public async Task CreatePermissionsAsync(Permissions permissions)
+    public async Task CreatePermissionsAsync(string PermissionName, string PermissionDescription, Permissions permissions)
     {
-        await _permissionsRepository.CreatePermissionsAsync(permissions);
+        await _permissionsRepository.CreatePermissionsAsync(PermissionName, PermissionDescription, permissions);
     }
 
-    public async Task UpdatePermissionsAsync(Permissions permissions)
+    public async Task UpdatePermissionsAsync(int PermissionsId, string PermissionName, string PermissionDescription, Permissions permissions)
     {
-        await _permissionsRepository.UpdatePermissionsAsync(permissions);
+        await _permissionsRepository.UpdatePermissionsAsync(PermissionsId, PermissionName, PermissionDescription, permissions);
     }
 
-    public Task DeletePermissionsAsync(int id)
+    public async Task DeletePermissionsAsync(int PermissionsId)
     {
-        throw new NotImplementedException();
+        await _permissionsRepository.DeletePermissionsAsync(PermissionsId);
+
     }
 
     public Task SoftDeletePermissionsAsync(int id)

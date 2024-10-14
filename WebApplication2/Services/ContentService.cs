@@ -3,12 +3,10 @@ namespace SGME.Services;
 public interface IContentService
 {
     Task<IEnumerable<Content>> GetAllContentAsync();
-    Task<Content> GetContentByIdAsync(int id);
-    Task CreateContentAsync(Content content);
-    Task UpdateContentAsync(Content content);
-    Task DeleteContentAsync(int id);
-    Task SoftDeleteContentAsync(int id);
-
+    Task<Content> GetContentByIdAsync(int ContentId);
+    Task UpdateContentAsync(int ContentId, string Contents, string ContentTitle, string ContentType, Content content);
+    Task SoftDeleteContentAsync(int ContentId);
+    Task CreateContentAsync(string Contents, string ContentTitle, string ContentType, Content content);
 }
 
 public class ContentService : IContentService
@@ -26,25 +24,25 @@ public class ContentService : IContentService
         return await _contentRepository.GetAllContentAsync();
     }
 
-    public async Task<Content> GetContentByIdAsync(int id)
+    public async Task<Content> GetContentByIdAsync(int ContentId)
     {
-        return await _contentRepository.GetContentByIdAsync(id);
+        return await _contentRepository.GetContentByIdAsync(ContentId);
     }
 
-    public async Task CreateContentAsync(Content content)
+    public async Task CreateContentAsync(string Contents, string ContentTitle, string ContentType, Content content)
     {
-        await _contentRepository.CreateContentAsync(content);
+        await _contentRepository.CreateContentAsync(Contents, ContentTitle, ContentType, content);
     }
 
-    public async Task UpdateContentAsync(Content content)
+    public async Task UpdateContentAsync(int ContentId, string Contents, string ContentTitle, string ContentType, Content content)
     {
-        await _contentRepository.UpdateContentAsync(content);
+        await _contentRepository.UpdateContentAsync(ContentId, Contents, ContentTitle, ContentType, content);
     }
 
-    public async Task DeleteContentAsync(int id)
+
+    public async Task SoftDeleteContentAsync(int ContentId)
     {
-        await _contentRepository.DeleteContentAsync(id);
-    }
+        await _contentRepository.SoftDeleteContentAsync(ContentId);
 
     public Task SoftDeleteContentAsync(int id)
     {

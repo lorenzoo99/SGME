@@ -3,17 +3,12 @@
 using SGME.Model;
 using WebApplication2.Context;
 
-
-
-
 public interface IContentRepository
 {
     Task<IEnumerable<Content>> GetAllContentAsync();
     Task<Content> GetContentByIdAsync(int ContentId);
-    Task CreateContentAsync(Content content);
-    Task UpdateContentAsync(Content content);
-
-    Task DeleteContentAsync(int ContentId);
+    Task CreateContentAsync(string contents, string contentTitle, string contentType, Content content);
+    Task UpdateContentAsync(int ContentId, string Contents, string ContentTitle, string ContentType, Content content);
 
     Task SoftDeleteContentAsync(int ContentId);
 
@@ -42,7 +37,7 @@ public class ContentRepository : IContentRepository
             .FirstOrDefaultAsync(c => c.ContentID == ContentId && !c.IsDeleted);
     }
 
-    public async Task CreateContentAsync(Content content)
+    public async Task CreateContentAsync(string Contents, string ContentTitle, string ContentType, Content content)
     {
         try
         {
@@ -55,13 +50,13 @@ public class ContentRepository : IContentRepository
         }
     }
 
-    public async Task UpdateContentAsync(Content content)
+    public async Task UpdateContentAsync(int ContentId, string Contents, string ContentTitle, string ContentType, Content content)
     {
         _context.Contents.Update(content);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteContentAsync(int ContentId)
+    public async Task SoftDeleteContentAsync(int ContentId)
     {
         var content = await _context.Contents.FindAsync(ContentId);
         if (content != null)
@@ -71,13 +66,10 @@ public class ContentRepository : IContentRepository
         }
     }
 
-    public Task SoftDeleteContentAsync(int ContentId)
-    {
-        throw new NotImplementedException();
-    }
+   
 }
 
-    
 
-   
+
+
 
