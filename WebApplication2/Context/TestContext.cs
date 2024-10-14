@@ -21,18 +21,7 @@ namespace WebApplication2.Context
         public DbSet<ContentUser> ContentUsers { get; set; } 
        
 
-        public DbSet<Record> Records { get; set; }
-        public DbSet<Comments> Comment { get; set; }
-       
-
-        public DbSet<Record> Records { get; set; }
-        public DbSet<Comments> Comment { get; set; }
-       
-
-        public DbSet<Record> Records { get; set; }
-        public DbSet<Comments> Comment { get; set; }
-       
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
