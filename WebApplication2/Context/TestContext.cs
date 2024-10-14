@@ -22,6 +22,7 @@ namespace WebApplication2.Context
        
 
         
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -31,11 +32,11 @@ namespace WebApplication2.Context
 
             modelBuilder.Entity<PermissionPerUserType>()
                    .HasKey(p => new { p.UserTypeID, p.PermissionID });
-                .HasKey(uh => uh.UsageHistoryID);
+                
             modelBuilder.Entity<Permissions>()
-                .HasKey(p =>  p.PermissionID );
+                .HasKey(p => p.PermissionID);
 
-                .HasKey(uh => uh.HistoryID);
+            modelBuilder.Entity<Platform>()    
                 .HasKey(pl => pl.PlatformID );
 
             modelBuilder.Entity<UsageHistory>()
