@@ -70,6 +70,8 @@ namespace SGME.Controllers
 
         public async Task<ActionResult> UpdateContentUser(int ContentId, string Contents, string ContentTitle, string ContentType, Content content)
         {
+            if (ContentId != content.ContentID)
+                return BadRequest();
 
             var existingContentUser = await _ContentService.GetContentByIdAsync(ContentId);
             if (existingContentUser == null)
@@ -100,7 +102,7 @@ namespace SGME.Controllers
 
             try
             {
-                await _ContentService.SoftDeleteContentAsync(ContentId);
+            await _ContentService.SoftDeleteContentAsync(ContentId);
                 return StatusCode(StatusCodes.Status200OK, ("Deleted Successfully"));
             }
             catch (Exception e)

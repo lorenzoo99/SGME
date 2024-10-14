@@ -21,6 +21,9 @@ namespace WebApplication2.Context
         public DbSet<ContentUser> ContentUsers { get; set; } 
        
 
+        
+       
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -32,7 +35,7 @@ namespace WebApplication2.Context
                    .HasKey(p => new { p.UserTypeID, p.PermissionID });
 
             modelBuilder.Entity<Permissions>()
-                .HasKey(p =>  p.PermissionID );
+                .HasKey(p => p.PermissionID);
 
             modelBuilder.Entity<Platform>()
                 .HasKey(pl => pl.PlatformID );

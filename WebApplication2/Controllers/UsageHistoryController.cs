@@ -96,7 +96,7 @@ namespace SGME.Controllers
             
                 var Content = await _usageHistoryService.GetUsageHistoryByIdAsync(UsageHistoryId);
                 if (Content == null)
-                    return NotFound();
+                return NotFound();
 
                 try
                 {
@@ -107,6 +107,6 @@ namespace SGME.Controllers
                 {
                     return StatusCode(404, e?.Message);
                 }
-            }
         }
+    }
 }

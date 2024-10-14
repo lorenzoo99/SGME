@@ -96,14 +96,14 @@ namespace SGME.Controllers
 
             try
             {
-                await _PermissionPerUserTypeService.DeletePermissionPerUserTypeAsync(UserTypeId, PermissionPerUserTypeId);
+            await _PermissionPerUserTypeService.DeletePermissionPerUserTypeAsync(UserTypeId, PermissionPerUserTypeId);
                 return StatusCode(StatusCodes.Status200OK, ("Deleted Successfully"));
             }
             catch (Exception e)
             {
                 return StatusCode(404, e?.Message);
 
-            }
         }
     }
+}
 }

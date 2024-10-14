@@ -46,7 +46,7 @@ namespace SGME.Controllers
 
         public async Task<ActionResult> CreateContentUser(string InteractionStatus, ContentUser contentUser)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) 
                 return BadRequest(ModelState);
             try
             {
@@ -69,6 +69,9 @@ namespace SGME.Controllers
 
         public async Task<ActionResult> UpdateContentUser(int ContentUserId, string InteractionStatus, ContentUser contentUser)
         {
+            if (ContentUserId != contentUser.ContentUserID)
+                return BadRequest();
+
             var existingContentUser = await _ContentUserService.GetContentUserByIdAsync(ContentUserId);
             if (existingContentUser == null)
                 return NotFound();
@@ -97,15 +100,15 @@ namespace SGME.Controllers
 
             try
             {
-                await _ContentUserService.DeleteContentUserAsync(ContentUserId);
+            await _ContentUserService.DeleteContentUserAsync(ContentUserId);
                 return StatusCode(StatusCodes.Status200OK, ("Deleted Successfully"));
             }
             catch (Exception e)
             {
                 return StatusCode(404, e?.Message);
 
-            }
         }
     }
+}
 }
 

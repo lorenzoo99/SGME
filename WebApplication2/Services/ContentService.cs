@@ -45,4 +45,6 @@ public class ContentService : IContentService
         await _contentRepository.SoftDeleteContentAsync(ContentId);
 
     }
+
 }
+

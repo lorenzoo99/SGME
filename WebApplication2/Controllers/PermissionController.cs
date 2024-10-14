@@ -91,7 +91,7 @@ namespace SGME.Controllers
         {
                 var Content = await _PermissionsService.GetPermissionsByIdAsync(PermissionsId);
                 if (Content == null)
-                    return NotFound();
+                return NotFound();
 
                 try
                 {
@@ -102,6 +102,6 @@ namespace SGME.Controllers
                 {
                     return StatusCode(404, e?.Message);
                 }
-            }
         }
+    }
 }
