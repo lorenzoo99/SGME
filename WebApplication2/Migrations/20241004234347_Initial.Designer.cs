@@ -12,7 +12,7 @@ using WebApplication2.Context;
 namespace SGME.Migrations
 {
     [DbContext(typeof(TestContext))]
-    [Migration("20240919215107_Initial")]
+    [Migration("20241004234347_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -41,6 +41,13 @@ namespace SGME.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Contents")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("PlatformID")
                         .HasColumnType("int");
 
@@ -54,7 +61,7 @@ namespace SGME.Migrations
                     b.ToTable("Contents");
                 });
 
-            modelBuilder.Entity("SGME.Model.ContentUsers", b =>
+            modelBuilder.Entity("SGME.Model.ContentUser", b =>
                 {
                     b.Property<int>("ContentUserID")
                         .ValueGeneratedOnAdd()
@@ -68,6 +75,9 @@ namespace SGME.Migrations
                     b.Property<string>("InteractionStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("UserID")
                         .HasColumnType("int");
@@ -95,6 +105,12 @@ namespace SGME.Migrations
                     b.Property<int>("PermissionID")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PermissionPerUserTypeID")
+                        .HasColumnType("int");
+
                     b.HasKey("UserTypeID", "PermissionID");
 
                     b.HasIndex("PermissionID");
@@ -109,6 +125,9 @@ namespace SGME.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PermissionID"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PermissionDescription")
                         .IsRequired()
@@ -130,6 +149,9 @@ namespace SGME.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlatformID"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PlatformDescription")
                         .IsRequired()
@@ -155,6 +177,12 @@ namespace SGME.Migrations
                     b.Property<int>("ContentID")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UsageHistoryId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 
@@ -170,7 +198,7 @@ namespace SGME.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UsageHistory");
+                    b.ToTable("UsageHistorys");
                 });
 
             modelBuilder.Entity("SGME.Model.User", b =>
@@ -187,6 +215,9 @@ namespace SGME.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -206,13 +237,19 @@ namespace SGME.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("SGME.Model.UserType", b =>
+            modelBuilder.Entity("UserType", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserTypeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserTypeId"));
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -226,7 +263,7 @@ namespace SGME.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserTypeId");
 
                     b.ToTable("UserTypes");
                 });
@@ -242,9 +279,9 @@ namespace SGME.Migrations
                     b.Navigation("Platform");
                 });
 
-            modelBuilder.Entity("SGME.Model.ContentUsers", b =>
+            modelBuilder.Entity("SGME.Model.ContentUser", b =>
                 {
-                    b.HasOne("SGME.Model.Content", "Content")
+                    b.HasOne("SGME.Model.Content", "Contents")
                         .WithMany("ContentUsers")
                         .HasForeignKey("ContentID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -256,7 +293,7 @@ namespace SGME.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Content");
+                    b.Navigation("Contents");
 
                     b.Navigation("User");
                 });
@@ -269,7 +306,7 @@ namespace SGME.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SGME.Model.UserType", "UserType")
+                    b.HasOne("UserType", "UserType")
                         .WithMany("PermissionPerUserType")
                         .HasForeignKey("UserTypeID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -301,7 +338,7 @@ namespace SGME.Migrations
 
             modelBuilder.Entity("SGME.Model.User", b =>
                 {
-                    b.HasOne("SGME.Model.UserType", "UserType")
+                    b.HasOne("UserType", "UserType")
                         .WithMany("Users")
                         .HasForeignKey("UserTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -330,7 +367,7 @@ namespace SGME.Migrations
                     b.Navigation("ContentUsers");
                 });
 
-            modelBuilder.Entity("SGME.Model.UserType", b =>
+            modelBuilder.Entity("UserType", b =>
                 {
                     b.Navigation("PermissionPerUserType");
 

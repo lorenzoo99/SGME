@@ -7,11 +7,11 @@ namespace SGME.Repositories
     public interface IUserRepository
     {
         Task<IEnumerable<User>> GetAllUserAsync();
-        Task<User> GetUserByIdAsync(int id);
-        Task CreateUserAsync(User user);
-        Task UpdateUserAsync(User user);
-        Task DeleteUserAsync(int id);
-        Task SoftDeleteUserAsync(int userId);
+        Task<User> GetUserByIdAsync(int UserId);
+        Task CreateUserAsync(string Name, string Email, string Password, User user);
+        Task UpdateUserAsync(int UserId, string Name, string Email, string Password, User user);
+        Task DeleteUserAsync(int Userid);
+        
     }
 
     public class UserRepository : IUserRepository
@@ -36,7 +36,7 @@ namespace SGME.Repositories
                 .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted);
         }
 
-        public async Task CreateUserAsync(User user)
+        public async Task CreateUserAsync(string Name, string Email, string Password, User user)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace SGME.Repositories
             }
         }
 
-        public async Task UpdateUserAsync(User user)
+        public async Task UpdateUserAsync(int UserId, string Name, string Email, string Password, User user)
         {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
@@ -65,9 +65,6 @@ namespace SGME.Repositories
             }
         }
 
-        public Task SoftDeleteUserAsync(int userId)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

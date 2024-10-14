@@ -16,9 +16,19 @@ namespace WebApplication2.Context
         public DbSet<PermissionPerUserType> PermissionPerUserTypes { get; set; }
         public DbSet<Permissions> Permissions { get; set; }
         public DbSet<Platform> Platforms { get; set; }
-        public DbSet<UsageHistory> UsageHistorys { get; set; }
+        public DbSet<UsageHistory> UsageHistories { get; set; }
         public DbSet<Content> Contents { get; set; }
         public DbSet<ContentUser> ContentUsers { get; set; } 
+       
+
+        public DbSet<Record> Records { get; set; }
+        public DbSet<Comments> Comment { get; set; }
+       
+
+        public DbSet<Record> Records { get; set; }
+        public DbSet<Comments> Comment { get; set; }
+       
+
         public DbSet<Record> Records { get; set; }
         public DbSet<Comments> Comment { get; set; }
        
@@ -32,15 +42,15 @@ namespace WebApplication2.Context
 
             modelBuilder.Entity<PermissionPerUserType>()
                    .HasKey(p => new { p.UserTypeID, p.PermissionID });
-
+                .HasKey(uh => uh.UsageHistoryID);
             modelBuilder.Entity<Permissions>()
                 .HasKey(p =>  p.PermissionID );
 
-            modelBuilder.Entity<Platform>()
+                .HasKey(uh => uh.HistoryID);
                 .HasKey(pl => pl.PlatformID );
 
             modelBuilder.Entity<UsageHistory>()
-                .HasKey(uh => uh.HistoryID);
+                .HasKey(uh => uh.UsageHistoryID);
 
             modelBuilder.Entity<Content>()
                 .HasKey(c => c.ContentID);

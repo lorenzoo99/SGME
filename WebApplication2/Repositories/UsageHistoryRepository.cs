@@ -7,10 +7,10 @@ namespace SGME.Repositories
     public interface IUsageHistoryRepository
     {
         Task<IEnumerable<UsageHistory>> GetAllUsageHistoriesAsync();
-        Task<UsageHistory> GetUsageHistoryByIdAsync(int id);
-        Task CreateUsageHistoryAsync(UsageHistory usageHistory);
-        Task UpdateUsageHistoryAsync(UsageHistory usageHistory);
-        Task DeleteUsageHistoryAsync(int id);
+        Task<UsageHistory> GetUsageHistoryByIdAsync(int UsageHistoryId);
+        Task CreateUsageHistoryAsync(int ViewDuration, UsageHistory usageHistory);
+        Task UpdateUsageHistoryAsync(int UsageHistoryId, int ViewDuration, UsageHistory usageHistory);
+        Task DeleteUsageHistoryAsync(int UsageHistoryId);
     }
 
     public class UsageHistoryRepository : IUsageHistoryRepository
@@ -24,22 +24,22 @@ namespace SGME.Repositories
 
         public async Task<IEnumerable<UsageHistory>> GetAllUsageHistoriesAsync()
         {
-            return await _context.UsageHistorys
+            return await _context.UsageHistories
                 .Where(uh => !uh.IsDeleted) // Excluye los eliminados
                 .ToListAsync();
         }
 
-        public async Task<UsageHistory> GetUsageHistoryByIdAsync(int id)
+        public async Task<UsageHistory> GetUsageHistoryByIdAsync(int UsageHistoryId)
         {
-            return await _context.UsageHistorys
-                .FirstOrDefaultAsync(uh => uh.UsageHistoryId == id && !uh.IsDeleted);
+            return await _context.UsageHistories
+                .FirstOrDefaultAsync(uh => uh.UsageHistoryId == UsageHistoryId && !uh.IsDeleted);
         }
 
-        public async Task CreateUsageHistoryAsync(UsageHistory usageHistory)
+        public async Task CreateUsageHistoryAsync(int ViewDuration, UsageHistory usageHistory)
         {
             try
             {
-                await _context.UsageHistorys.AddAsync(usageHistory);
+                await _context.UsageHistories.AddAsync(usageHistory);
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
@@ -48,15 +48,15 @@ namespace SGME.Repositories
             }
         }
 
-        public async Task UpdateUsageHistoryAsync(UsageHistory usageHistory)
+        public async Task UpdateUsageHistoryAsync(int UsageHistoryId, int ViewDuration, UsageHistory usageHistory)
         {
-            _context.UsageHistorys.Update(usageHistory);
+            _context.UsageHistories.Update(usageHistory);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteUsageHistoryAsync(int id)
+        public async Task DeleteUsageHistoryAsync(int UsageHistoryId)
         {
-            var usageHistory = await _context.UsageHistorys.FindAsync(id);
+            var usageHistory = await _context.UsageHistories.FindAsync(UsageHistoryId);
             if (usageHistory != null)
             {
                 usageHistory.IsDeleted = true; // Soft delete

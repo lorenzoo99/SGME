@@ -9,11 +9,11 @@ public interface IPermissionsRepository
 {
     Task<IEnumerable<Permissions>> GetAllPermissionsAsync();
 
-    Task<Permissions> GetPermissionsByIdAsync(int id);
-    Task CreatePermissionsAsync(Permissions permissions);
-    Task UpdatePermissionsAsync(Permissions permissions);
-    Task DeletePermissionsAsync(int id);
-    Task SoftDeletePermissionsAsync(int id);
+    Task<Permissions> GetPermissionsByIdAsync(int PermissionsId);
+    Task CreatePermissionsAsync(string PermissionName, string PermissionDescription, Permissions permissions);
+    Task UpdatePermissionsAsync(int PermissionsId, string PermissionName, string PermissionDescription, Permissions permissions);
+    Task DeletePermissionsAsync(int PermissionsId);
+   
 
 }
 
@@ -34,13 +34,13 @@ public class PermissionsRepository : IPermissionsRepository
             .ToListAsync();
     }
 
-    public async Task<Permissions> GetPermissionsByIdAsync(int id)
+    public async Task<Permissions> GetPermissionsByIdAsync(int PermissionsId)
     {
         return await _context.Permissions
-            .FirstOrDefaultAsync(p => p.PermissionID == id && !p.IsDeleted);
+            .FirstOrDefaultAsync(p => p.PermissionID == PermissionsId && !p.IsDeleted);
     }
 
-    public async Task CreatePermissionsAsync(Permissions permissions)
+    public async Task CreatePermissionsAsync(string PermissionName, string PermissionDescription, Permissions permissions)
     {
         try
         {
@@ -53,15 +53,15 @@ public class PermissionsRepository : IPermissionsRepository
         }
     }
 
-    public async Task UpdatePermissionsAsync(Permissions permissions)
+    public async Task UpdatePermissionsAsync(int PermissionsId, string PermissionName, string PermissionDescription, Permissions permissions)
     {
         _context.Permissions.Update(permissions);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeletePermissionsAsync(int id)
+    public async Task DeletePermissionsAsync(int PermissionsId)
     {
-        var permissions = await _context.Permissions.FindAsync(id);
+        var permissions = await _context.Permissions.FindAsync(PermissionsId);
         if (permissions != null)
         {
             permissions.IsDeleted = true; // Soft delete
@@ -70,8 +70,6 @@ public class PermissionsRepository : IPermissionsRepository
 
     }
 
-    public Task SoftDeletePermissionsAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
+    
+    
 }
