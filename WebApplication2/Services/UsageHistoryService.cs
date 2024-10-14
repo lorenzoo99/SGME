@@ -23,7 +23,7 @@ namespace SGME.Services
             _usageHistoryRepository = usageHistoryRepository;
         }
 
-        public async Task<IEnumerable<UsageHistory>> GetAllUsageHistoriesAsync()
+        public async Task<IEnumerable<UserType>> GetAllUsageHistoriesAsync()
         {
             return await _usageHistoryRepository.GetAllUsageHistoriesAsync();
         }

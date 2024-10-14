@@ -92,14 +92,14 @@ namespace SGME.Controllers
 
             try
             {
-                await _PlatformService.DeletePlatformAsync(PlatformId);
+            await _PlatformService.DeletePlatformAsync(PlatformId);
                 return StatusCode(StatusCodes.Status200OK, ("Deleted Successfully"));
             }
             catch (Exception e)
             {
                 return StatusCode(404, e?.Message);
 
-            }
         }
     }
+}
 }

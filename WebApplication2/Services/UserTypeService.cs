@@ -10,7 +10,7 @@ namespace SGME.Services
         Task CreateUserTypeAsync(string Name, string UserTypeName, string UserTypeDescription, UserType userType);
         Task UpdateUserTypeAsync(int UserTypeId, string Name, string UserTypeName, string UserTypeDescription, UserType userType);
         Task DeleteUserTypeAsync(int UserTypeIdd);
-        
+
         
     }
 

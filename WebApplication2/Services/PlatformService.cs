@@ -8,6 +8,7 @@ public interface IPlatformService
     Task UpdatePlatformAsync(int PlatformId, string PlatformName, string PlatformDescription, Platform platform);
     Task DeletePlatformAsync(int PlatformId);
     
+    
 }
 
 public class PlatformService : IPlatformService

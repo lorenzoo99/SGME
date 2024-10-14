@@ -21,6 +21,18 @@ namespace WebApplication2.Context
         public DbSet<ContentUser> ContentUsers { get; set; } 
        
 
+        public DbSet<Record> Records { get; set; }
+        public DbSet<Comments> Comment { get; set; }
+       
+
+        public DbSet<Record> Records { get; set; }
+        public DbSet<Comments> Comment { get; set; }
+       
+
+        public DbSet<Record> Records { get; set; }
+        public DbSet<Comments> Comment { get; set; }
+       
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -30,11 +42,11 @@ namespace WebApplication2.Context
 
             modelBuilder.Entity<PermissionPerUserType>()
                    .HasKey(p => new { p.UserTypeID, p.PermissionID });
-
+                .HasKey(uh => uh.UsageHistoryID);
             modelBuilder.Entity<Permissions>()
                 .HasKey(p =>  p.PermissionID );
 
-            modelBuilder.Entity<Platform>()
+                .HasKey(uh => uh.HistoryID);
                 .HasKey(pl => pl.PlatformID );
 
             modelBuilder.Entity<UsageHistory>()

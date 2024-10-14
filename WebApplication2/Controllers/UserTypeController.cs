@@ -8,7 +8,7 @@ namespace SGME.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class UserTypeController : ControllerBase
-
+   
     {
         private readonly IUserTypeService _UserTypeService;
 

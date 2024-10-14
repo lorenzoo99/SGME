@@ -10,7 +10,8 @@ public interface IPermissionsService
     Task DeletePermissionsAsync(int PermissionsId);
 
  
-    
+    Task SoftDeletePermissionsAsync(int id);
+
     
 }
 
@@ -50,5 +51,9 @@ public class PermissionsService : IPermissionsService
 
     }
 
+    public Task SoftDeletePermissionsAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
 }
 
