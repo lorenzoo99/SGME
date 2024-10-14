@@ -1,15 +1,16 @@
 ﻿using SGME.Model;
 using SGME.Repositories;
+using SGME.Services;
 
 namespace SGME.Services
 {
     public interface IUsageHistoryService
     {
-        Task<IEnumerable<UserType>> GetAllUsageHistoriesAsync();
-        Task<UserType> GetUsageHistoryByIdAsync(int id);
-        Task CreateUsageHistoryAsync(UserType usageHistory);
-        Task UpdateUsageHistoryAsync(UserType usageHistory);
-        Task DeleteUsageHistoryAsync(int id);
+        Task<IEnumerable<UsageHistory>> GetAllUsageHistoriesAsync();
+        Task<UsageHistory> GetUsageHistoryByIdAsync(int UsageHistoryId);
+        Task CreateUsageHistoryAsync(int ViewDuration, UsageHistory usageHistory);
+        Task UpdateUsageHistoryAsync(int UsageHistoryId, int ViewDuration, UsageHistory usageHistory);
+        Task DeleteUsageHistoryAsync(int UsageHistoryId);
 
     }
 
@@ -22,30 +23,31 @@ namespace SGME.Services
             _usageHistoryRepository = usageHistoryRepository;
         }
 
-        public async Task<IEnumerable<UserType>> GetAllUsageHistoriesAsync()
+        public async Task<IEnumerable<UsageHistory>> GetAllUsageHistoriesAsync()
         {
             return await _usageHistoryRepository.GetAllUsageHistoriesAsync();
         }
-
-        public async Task<UserType> GetUsageHistoryByIdAsync(int id)
+        public async Task<UsageHistory> GetUsageHistoryByIdAsync(int UsageHistoryId)
         {
-            return await _usageHistoryRepository.GetUsageHistoryByIdAsync(id);
+            return await _usageHistoryRepository.GetUsageHistoryByIdAsync(UsageHistoryId);
         }
 
-        public async Task CreateUsageHistoryAsync(UserType usageHistory)
+
+        public async Task CreateUsageHistoryAsync(int ViewDuration, UsageHistory usageHistory)
         {
-            await _usageHistoryRepository.CreateUsageHistoryAsync(usageHistory);
+            await _usageHistoryRepository.CreateUsageHistoryAsync(ViewDuration, usageHistory);
         }
 
-        public async Task UpdateUsageHistoryAsync(UserType usageHistory)
+        public async Task UpdateUsageHistoryAsync(int UsageHistoryId, int ViewDuration, UsageHistory usageHistory)
         {
-            await _usageHistoryRepository.UpdateUsageHistoryAsync(usageHistory);
+            await _usageHistoryRepository.UpdateUsageHistoryAsync(UsageHistoryId, ViewDuration, usageHistory);
         }
 
-        public async Task DeleteUsageHistoryAsync(int id)
+        public async Task DeleteUsageHistoryAsync(int UsageHistoryId)
         {
-            await _usageHistoryRepository.DeleteUsageHistoryAsync(id);
+            await _usageHistoryRepository.DeleteUsageHistoryAsync(UsageHistoryId);
         }
 
+        
     }
 }

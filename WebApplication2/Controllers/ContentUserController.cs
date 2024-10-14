@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using SGME.Model;
 using SGME.Services;
 
@@ -16,11 +17,18 @@ namespace SGME.Controllers
 
             _ContentUserService = ContentUserService;
         }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<ContentUser>>> GetAllContentUser()
         {
             var ContentUser = await _ContentUserService.GetAllContentUsersAsync();
             return Ok(ContentUser);
         }
+
+        [HttpGet("{ContentUserId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
 
         public async Task<ActionResult<ContentUser>> GetContentUserById(int ContentUserId)
         {
@@ -31,16 +39,35 @@ namespace SGME.Controllers
             return Ok(ContentUser);
         }
 
-        public async Task<ActionResult> CreateContentUser([FromBody] ContentUser contentUser)
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        public async Task<ActionResult> CreateContentUser(string InteractionStatus, ContentUser contentUser)
         {
             if (!ModelState.IsValid) 
                 return BadRequest(ModelState);
+            try
+            {
+                await _ContentUserService.CreateContentUserAsync(InteractionStatus, contentUser);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(404, ex.Message);
+            }
 
-            await _ContentUserService.CreateContentUserAsync(contentUser);
-            return CreatedAtAction(nameof(GetContentUserById), new { ContentUserId = contentUser.ContentID }, contentUser);
+
+            return StatusCode(StatusCodes.Status201Created, "ContentUser created");
         }
 
-        public async Task<ActionResult> UpdateContentUser(int ContentUserId, [FromBody] ContentUser contentUser)
+        [HttpPut("{ContentUserId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<ActionResult> UpdateContentUser(int ContentUserId, string InteractionStatus, ContentUser contentUser)
         {
             if (ContentUserId != contentUser.ContentUserID)
                 return BadRequest();
@@ -48,20 +75,40 @@ namespace SGME.Controllers
             var existingContentUser = await _ContentUserService.GetContentUserByIdAsync(ContentUserId);
             if (existingContentUser == null)
                 return NotFound();
+            try
+            {
 
-            await _ContentUserService.UpdateContentUserAsync(contentUser);
-            return NoContent();
+                await _ContentUserService.UpdateContentUserAsync(ContentUserId, InteractionStatus, contentUser);
+                return StatusCode(StatusCodes.Status200OK, ("Updated Successfully"));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(404, e.Message);
+            }
         }
 
-        public async Task<ActionResult> SoftDeleteContentUser(int ContentUserId)
+        [HttpDelete("{ContentUserId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<ActionResult> DeleteContentUser(int ContentUserId)
         {
-            var ContentUser = await _ContentUserService.GetContentUserByIdAsync(ContentUserId);
-            if (ContentUser == null)
+            var Content = await _ContentUserService.GetContentUserByIdAsync(ContentUserId);
+            if (Content == null)
                 return NotFound();
 
+            try
+            {
             await _ContentUserService.DeleteContentUserAsync(ContentUserId);
-            return NoContent();
+                return StatusCode(StatusCodes.Status200OK, ("Deleted Successfully"));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(404, e?.Message);
 
         }
     }
 }
+}
+

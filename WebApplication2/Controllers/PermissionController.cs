@@ -15,11 +15,18 @@ namespace SGME.Controllers
 
             _PermissionsService = PermissionsService;
         }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Permissions>>> GetAllPermissions()
         {
             var Permissions = await _PermissionsService.GetAllPermissionsAsync();
             return Ok(Permissions);
         }
+
+        [HttpGet("{PermissionsId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
 
         public async Task<ActionResult<Permissions>> GetPermissionsById(int PermissionsId)
         {
@@ -30,37 +37,71 @@ namespace SGME.Controllers
             return Ok(Permissions);
         }
 
-        public async Task<ActionResult> CreateUser([FromBody] Permissions permissions)
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        public async Task<ActionResult> CreateUser(string PermissionName, string PermissionDescription, Permissions permissions)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            try
+            {
+                await _PermissionsService.CreatePermissionsAsync(PermissionName, PermissionDescription, permissions);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(404, ex.Message);
+            }
 
-            await _PermissionsService.CreatePermissionsAsync(permissions);
-            return CreatedAtAction(nameof(GetPermissionsById), new { PermissionsId = permissions.PermissionID }, permissions);
+
+            return StatusCode(StatusCodes.Status201Created, "Permission created");
         }
 
-        public async Task<ActionResult> UpdatePermissions(int PermissionsId, [FromBody] Permissions permissions)
+            [HttpPut("{PermissionsId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<ActionResult> UpdatePermissions(int PermissionsId, string PermissionName, string PermissionDescription, Permissions permissions)
         {
-            if (PermissionsId != permissions.PermissionID)
-                return BadRequest();
-
-            var existingPermissions = await _PermissionsService.GetPermissionsByIdAsync(PermissionsId);
-            if (existingPermissions == null)
+            var existingContentUser = await _PermissionsService.GetPermissionsByIdAsync(PermissionsId);
+            if (existingContentUser == null)
                 return NotFound();
+            try
+            {
 
-            await _PermissionsService.UpdatePermissionsAsync(permissions);
-            return NoContent();
+                await _PermissionsService.UpdatePermissionsAsync(PermissionsId, PermissionName, PermissionDescription, permissions);
+                return StatusCode(StatusCodes.Status200OK, ("Updated Successfully"));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(404, e.Message);
+            }
         }
 
-        public async Task<ActionResult> SoftDeletePermissions(int PermissionsId)
+        [HttpDelete("{PermissionsId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<ActionResult> DeletePermissions(int PermissionsId)
         {
-            var Permissions = await _PermissionsService.GetPermissionsByIdAsync(PermissionsId);
-            if (Permissions == null)
+                var Content = await _PermissionsService.GetPermissionsByIdAsync(PermissionsId);
+                if (Content == null)
                 return NotFound();
 
-            await _PermissionsService.SoftDeletePermissionsAsync(PermissionsId);
-            return NoContent();
-
+                try
+                {
+                    await _PermissionsService.DeletePermissionsAsync(PermissionsId);
+                    return StatusCode(StatusCodes.Status200OK, ("Deleted Successfully"));
+                }
+                catch (Exception e)
+                {
+                    return StatusCode(404, e?.Message);
+                }
         }
     }
 }

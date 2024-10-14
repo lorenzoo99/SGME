@@ -6,9 +6,9 @@ namespace SGME.Services
     {
         Task<IEnumerable<ContentUser>> GetAllContentUsersAsync();
         Task<ContentUser> GetContentUserByIdAsync(int ContentUserid);
-        Task CreateContentUserAsync(ContentUser contentUser);
-        Task UpdateContentUserAsync(ContentUser contentUser);
+        Task UpdateContentUserAsync(int ContentUserId, string InteractionStatus, ContentUser contentUser);
         Task DeleteContentUserAsync(int ContentUserid);
+        Task CreateContentUserAsync(string interactionStatus, ContentUser contentUser);
     }
 
     public class ContentUserService : IContentUserService
@@ -30,14 +30,14 @@ namespace SGME.Services
             return await _contentUserRepository.GetContentUserByIdAsync(ContentUserId);
         }
 
-        public async Task CreateContentUserAsync(ContentUser contentUser)
+        public async Task CreateContentUserAsync(string interactionStatus, ContentUser contentUser)
         {
-            await _contentUserRepository.CreateContentUserAsync(contentUser);
+            await _contentUserRepository.CreateContentUserAsync(interactionStatus, contentUser);
         }
-
-        public async Task UpdateContentUserAsync(ContentUser contentUser)
+        
+        public async Task UpdateContentUserAsync(int ContentUserId, string InteractionStatus, ContentUser contentUser)
         {
-            await _contentUserRepository.UpdateContentUserAsync(contentUser);
+            await _contentUserRepository.UpdateContentUserAsync(ContentUserId, InteractionStatus, contentUser);
         }
 
         public async Task DeleteContentUserAsync(int ContentUserId)
