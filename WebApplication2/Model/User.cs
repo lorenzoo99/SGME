@@ -23,8 +23,6 @@ namespace SGME.Model
 
         public required ICollection<ContentUser> ContentUsers { get; set; }
 
-        public virtual required Record Record { get; set; }
-
 
     }
 }

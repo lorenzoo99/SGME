@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using SGME.Model;
+using SGME.Repositories;
+using SGME.Services;
+
 
 namespace SGME.Controllers
 {
@@ -15,11 +19,19 @@ namespace SGME.Controllers
 
             _UserService = UserService;
         }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
         public async Task<ActionResult<IEnumerable<User>>> GetAllUser()
         {
             var Users = await _UserService.GetAllUserAsync();
             return Ok(Users);
         }
+
+        [HttpGet("{UserId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
 
         public async Task<ActionResult<User>> GetUserById(int UserId)
         {
@@ -30,36 +42,72 @@ namespace SGME.Controllers
             return Ok(User);
         }
 
-        public async Task<ActionResult> CreateUser([FromBody] User user)
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        public async Task<ActionResult> CreateUser(string Name, string Email, string Password, User user)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            try
+            {
+                await _UserService.CreateUserAsync(Name, Email, Password, user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(404, ex.Message);
+            }
 
-            await _UserService.CreateUserAsync(user);
-            return CreatedAtAction(nameof(GetUserById), new { UserId = user.Id }, user);
+
+            return StatusCode(StatusCodes.Status201Created, "User created");
         }
 
-        public async Task<ActionResult> UpdateUser(int UserId, [FromBody] User user)
+
+        [HttpPut("{UserId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<ActionResult> UpdateUser(int UserId, string Name, string Email, string Password, User user)
         {
-            if (UserId != user.Id)
-                return BadRequest();
-
-            var existingUser = await _UserService.GetUserByIdSync(UserId);
-            if (existingUser == null)
+            var existingContentUser = await _UserService.GetUserByIdSync(UserId);
+            if (existingContentUser == null)
                 return NotFound();
+            try
+            {
 
-            await _UserService.UpdateUserAsync(user);
-            return NoContent();
+                await _UserService.UpdateUserAsync(UserId, Name, Email, Password, user);
+                return StatusCode(StatusCodes.Status200OK, ("Updated Successfully"));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(404, e.Message);
+            }
         }
 
-        public async Task<ActionResult> SoftDeleteUser(int UserId)
+        [HttpDelete("{UserId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<ActionResult> DeleteUser(int UserId)
         {
-            var User = await _UserService.GetUserByIdSync(UserId);
-            if (User == null)
+            var Content = await _UserService.GetUserByIdSync(UserId);
+            if (Content == null)
                 return NotFound();
 
-            await _UserService.SoftDeleteUserAsync(UserId);
-            return NoContent();
+            try
+            {
+                await _UserService.DeleteUserAsync(UserId);
+                return StatusCode(StatusCodes.Status200OK, ("Deleted Successfully"));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(404, e?.Message);
+            }
 
         }
     }

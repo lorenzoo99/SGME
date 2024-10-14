@@ -7,11 +7,11 @@ namespace SGME.Services
     {
         Task<IEnumerable<UserType>> GetAllUserTypeAsync();
         Task<UserType> GetUserTypeByIdAsync(int UserTypeId);
-        Task CreateUserTypeAsync(UserType UserType);
-        Task UpdateUserTypeAsync(UserType UserType);
-        Task DeleteUserTypeAsync(int id);
-        Task SoftDeleteUserTypeAsync(int UserTypeId);
+        Task CreateUserTypeAsync(string Name, string UserTypeName, string UserTypeDescription, UserType userType);
+        Task UpdateUserTypeAsync(int UserTypeId, string Name, string UserTypeName, string UserTypeDescription, UserType userType);
+        Task DeleteUserTypeAsync(int UserTypeIdd);
 
+        
     }
 
     public class UserTypeService : IUserTypeService
@@ -33,14 +33,14 @@ namespace SGME.Services
             return await _userTypeRepository.GetUserTypeByIdAsync(UserTypeId);
         }
 
-        public async Task CreateUserTypeAsync(UserType userType)
+        public async Task CreateUserTypeAsync(string Name, string UserTypeName, string UserTypeDescription, UserType userType)
         {
-            await _userTypeRepository.CreateUserTypeAsync(userType);
+            await _userTypeRepository.CreateUserTypeAsync(Name, UserTypeName, UserTypeDescription, userType);
         }
 
-        public async Task UpdateUserTypeAsync(UserType userType)
+        public async Task UpdateUserTypeAsync(int UserTypeId, string Name, string UserTypeName, string UserTypeDescription, UserType userType)
         {
-            await _userTypeRepository.UpdateUserTypeAsync(userType);
+            await _userTypeRepository.UpdateUserTypeAsync(UserTypeId, Name, UserTypeName, UserTypeDescription, userType);
         }
 
         public async Task DeleteUserTypeAsync(int UserTypeId)
@@ -48,9 +48,6 @@ namespace SGME.Services
             await _userTypeRepository.DeleteUserTypeAsync(UserTypeId);
         }
 
-        public async Task SoftDeleteUserTypeAsync(int UserTypeId)
-        {
-            await _userTypeRepository.SoftDeleteUserTypeAsync(UserTypeId);
-        }
+       
     }
 }

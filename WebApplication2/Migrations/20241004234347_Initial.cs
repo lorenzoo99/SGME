@@ -18,7 +18,8 @@ namespace SGME.Migrations
                     PermissionID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PermissionName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PermissionDescription = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PermissionDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -32,7 +33,8 @@ namespace SGME.Migrations
                     PlatformID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PlatformName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PlatformDescription = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PlatformDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,15 +45,17 @@ namespace SGME.Migrations
                 name: "UserTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    UserTypeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserTypeDescription = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserTypeDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserTypes", x => x.Id);
+                    table.PrimaryKey("PK_UserTypes", x => x.UserTypeId);
                 });
 
             migrationBuilder.CreateTable(
@@ -60,10 +64,12 @@ namespace SGME.Migrations
                 {
                     ContentID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Contents = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContentTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PublicationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    PlatformID = table.Column<int>(type: "int", nullable: false)
+                    PlatformID = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,7 +87,9 @@ namespace SGME.Migrations
                 columns: table => new
                 {
                     UserTypeID = table.Column<int>(type: "int", nullable: false),
-                    PermissionID = table.Column<int>(type: "int", nullable: false)
+                    PermissionID = table.Column<int>(type: "int", nullable: false),
+                    PermissionPerUserTypeID = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,7 +104,7 @@ namespace SGME.Migrations
                         name: "FK_PermissionPerUserTypes_UserTypes_UserTypeID",
                         column: x => x.UserTypeID,
                         principalTable: "UserTypes",
-                        principalColumn: "Id",
+                        principalColumn: "UserTypeId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -110,6 +118,7 @@ namespace SGME.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UserTypeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -119,7 +128,7 @@ namespace SGME.Migrations
                         name: "FK_Users_UserTypes_UserTypeId",
                         column: x => x.UserTypeId,
                         principalTable: "UserTypes",
-                        principalColumn: "Id",
+                        principalColumn: "UserTypeId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -133,7 +142,8 @@ namespace SGME.Migrations
                     ViewDuration = table.Column<int>(type: "int", nullable: false),
                     InteractionStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserID = table.Column<int>(type: "int", nullable: false),
-                    ContentID = table.Column<int>(type: "int", nullable: false)
+                    ContentID = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -153,7 +163,7 @@ namespace SGME.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UsageHistory",
+                name: "UsageHistorys",
                 columns: table => new
                 {
                     HistoryID = table.Column<int>(type: "int", nullable: false)
@@ -161,19 +171,21 @@ namespace SGME.Migrations
                     ViewDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ViewDuration = table.Column<int>(type: "int", nullable: false),
                     UserID = table.Column<int>(type: "int", nullable: false),
-                    ContentID = table.Column<int>(type: "int", nullable: false)
+                    ContentID = table.Column<int>(type: "int", nullable: false),
+                    UsageHistoryId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UsageHistory", x => x.HistoryID);
+                    table.PrimaryKey("PK_UsageHistorys", x => x.HistoryID);
                     table.ForeignKey(
-                        name: "FK_UsageHistory_Contents_ContentID",
+                        name: "FK_UsageHistorys_Contents_ContentID",
                         column: x => x.ContentID,
                         principalTable: "Contents",
                         principalColumn: "ContentID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UsageHistory_Users_UserID",
+                        name: "FK_UsageHistorys_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -201,13 +213,13 @@ namespace SGME.Migrations
                 column: "PermissionID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsageHistory_ContentID",
-                table: "UsageHistory",
+                name: "IX_UsageHistorys_ContentID",
+                table: "UsageHistorys",
                 column: "ContentID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsageHistory_UserID",
-                table: "UsageHistory",
+                name: "IX_UsageHistorys_UserID",
+                table: "UsageHistorys",
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
@@ -226,7 +238,7 @@ namespace SGME.Migrations
                 name: "PermissionPerUserTypes");
 
             migrationBuilder.DropTable(
-                name: "UsageHistory");
+                name: "UsageHistorys");
 
             migrationBuilder.DropTable(
                 name: "Permissions");
