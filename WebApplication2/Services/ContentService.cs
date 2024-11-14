@@ -43,11 +43,8 @@ public class ContentService : IContentService
     public async Task SoftDeleteContentAsync(int ContentId)
     {
         await _contentRepository.SoftDeleteContentAsync(ContentId);
-
-    public Task SoftDeleteContentAsync(int id)
-    {
-        throw new NotImplementedException();
     }
+
 
 }
 

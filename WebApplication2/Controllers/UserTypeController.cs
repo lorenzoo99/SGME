@@ -7,74 +7,83 @@ namespace SGME.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserTypeController : ControllerBase
-   
+    public class UserTypesController : ControllerBase
     {
-        private readonly IUserTypeService _UserTypeService;
+        private readonly IUserTypeService _userTypeService;
 
-        public UserTypeController(IUserTypeService UserTypeService)
+        public UserTypesController(IUserTypeService userTypeService)
         {
-
-            _UserTypeService = UserTypeService;
+            _userTypeService = userTypeService;
         }
 
+
+        // Get all userTypes
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<UserType>>> GetAllUserType()
+        public async Task<ActionResult<IEnumerable<UserType>>> GetAllUserTypes()
         {
-            var UserType = await _UserTypeService.GetAllUserTypeAsync();
-            return Ok(UserType);
+            var userTypes = await _userTypeService.GetAllUserTypeAsync();
+            return Ok(userTypes);
         }
 
-        [HttpGet("{UserTypeId}")]
+
+        // Get userType by id
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserType>> GetUserTypeById(int UserTypeId)
+        public async Task<ActionResult<UserType>> GetUserTypeById(int id)
         {
-            var UserType = await _UserTypeService.GetUserTypeByIdAsync(UserTypeId);
-            if (UserType == null)
-                return NotFound();
+            var userType = await _userTypeService.GetUserTypeByIdAsync(id);
+            if (userType == null) return NotFound();
 
-            return Ok(UserType);
+            return Ok(userType);
         }
 
+
+
+        // Create a UserType
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public async Task<ActionResult> CreateUserType(string Name, string UserTypeName, string UserTypeDescription, UserType userType)
+        public async Task<ActionResult> CreateUserType(string name)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             try
             {
-                await _UserTypeService.CreateUserTypeAsync(Name, UserTypeName, UserTypeDescription, userType);
+                await _userTypeService.CreateUserTypeAsync(name);
             }
             catch (Exception ex)
             {
-                return StatusCode(404, ex.Message);
+                return StatusCode(404, ex.Message); ;
             }
 
 
-            return StatusCode(StatusCodes.Status201Created, "UserType created");
+            return StatusCode(StatusCodes.Status201Created, "UserType created successfully.");
+
         }
 
-        [HttpPut("{UserTypeId}")]
+
+        // Update a UserType
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
 
-        public async Task<ActionResult> UpdateTypeUser(int UserTypeId, string Name, string UserTypeName, string UserTypeDescription, UserType userType)
+
+        public async Task<IActionResult> UpdateUserType(int id, string name)
         {
-            var existingContentUser = await _UserTypeService.GetUserTypeByIdAsync(UserTypeId);
-            if (existingContentUser == null)
-                return NotFound();
+
+            var existingUserType = await _userTypeService.GetUserTypeByIdAsync(id);
+            if (existingUserType == null) return NotFound();
+
+           
             try
             {
-
-                await _UserTypeService.UpdateUserTypeAsync(UserTypeId, Name, UserTypeName, UserTypeDescription, userType);
+                await _userTypeService.UpdateUserTypeAsync(id, name);
                 return StatusCode(StatusCodes.Status200OK, ("Updated Successfully"));
             }
             catch (Exception e)
@@ -83,20 +92,21 @@ namespace SGME.Controllers
             }
         }
 
-        [HttpDelete("{UserTypeId}")]
+        // Delete a userType
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
 
-        public async Task<ActionResult> DeleteUserType(int UserTypeId)
+
+        public async Task<IActionResult> SoftDeleteUserType(int id)
         {
-            var Content = await _UserTypeService.GetUserTypeByIdAsync(UserTypeId);
-            if (Content == null)
-                return NotFound();
+            var userType = await _userTypeService.GetUserTypeByIdAsync(id);
+            if (userType == null) return NotFound();
 
             try
             {
-                await _UserTypeService.DeleteUserTypeAsync(UserTypeId);
+                await _userTypeService.SoftDeleteUserTypeAsync(id);
                 return StatusCode(StatusCodes.Status200OK, ("Deleted Successfully"));
             }
             catch (Exception e)
@@ -104,5 +114,6 @@ namespace SGME.Controllers
                 return StatusCode(404, e?.Message);
             }
         }
+
     }
 }

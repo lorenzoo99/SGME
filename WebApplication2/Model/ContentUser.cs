@@ -20,5 +20,6 @@
         public int ContentID { get; set; }
         public virtual required Content Contents { get; set; }
         public bool IsDeleted { get; internal set; }
+        public object? Id { get; internal set; }
     }
 }
