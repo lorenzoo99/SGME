@@ -12,5 +12,6 @@ namespace SGME.Model
         public int PermissionID { get; set; }
         public virtual required Permissions Permission { get; set; }  // Navigation property
         public bool IsDeleted { get; internal set; }
+        public object? Id { get; internal set; }
     }
 }

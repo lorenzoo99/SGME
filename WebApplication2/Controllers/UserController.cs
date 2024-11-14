@@ -10,76 +10,112 @@ namespace SGME.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
-        private readonly IUserService _UserService;
+        private readonly IUserService _userService;
 
-        public UserController(IUserService UserService)
+        public UsersController(IUserService userService)
         {
-
-            _UserService = UserService;
+            _userService = userService;
         }
 
+
+        // Get all users
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-
-        public async Task<ActionResult<IEnumerable<User>>> GetAllUser()
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {
-            var Users = await _UserService.GetAllUserAsync();
-            return Ok(Users);
+            var users = await _userService.GetAllUsersAsync();
+            return Ok(users);
         }
 
-        [HttpGet("{UserId}")]
+
+        // Get user by id
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-
-        public async Task<ActionResult<User>> GetUserById(int UserId)
+        public async Task<ActionResult<User>> GetUserById(int id)
         {
-            var User = await _UserService.GetUserByIdSync(UserId);
-            if (User == null)
-                return NotFound();
+            var user = await _userService.GetUserByIdAsync(id);
+            if (user == null) return NotFound();
 
-            return Ok(User);
+            return Ok(user);
         }
 
+
+
+        // Create a User
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public async Task<ActionResult> CreateUser(string Name, string Email, string Password, User user)
+        public async Task<ActionResult> CreateUser(string name, string lastName, string email, string password, string identification, int userTypeId)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             try
             {
-                await _UserService.CreateUserAsync(Name, Email, Password, user);
+                await _userService.CreateUserAsync(name, email, password, userTypeId);
             }
             catch (Exception ex)
             {
-                return StatusCode(404, ex.Message);
+                return StatusCode(404, ex.Message); ;
             }
 
 
-            return StatusCode(StatusCodes.Status201Created, "User created");
+            return StatusCode(StatusCodes.Status201Created, "User created successfully.");
+
+        }
+
+        // Validate a user Login
+        [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        public async Task<ActionResult> ValidateUser(string email, string password)
+        {
+            if (email == null || password == null) return BadRequest(ModelState);
+
+            // Validate the user
+            try
+            {
+                var isValid = await _userService.ValidateUserAsync(email, password);
+                if (isValid)
+                {
+                    // Handle successful login  
+                    return Ok(new { Message = "Login successful" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(404, ex.Message); ;
+            }
+
+            // Handle failed login
+            return Unauthorized(new { Message = "Invalid Password" });
         }
 
 
-        [HttpPut("{UserId}")]
+        // Update a User
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
 
-        public async Task<ActionResult> UpdateUser(int UserId, string Name, string Email, string Password, User user)
+
+        public async Task<IActionResult> UpdateUser(int id, string name, string email, string password, int userTypeId)
         {
-            var existingContentUser = await _UserService.GetUserByIdSync(UserId);
-            if (existingContentUser == null)
-                return NotFound();
+
+            var existingUser = await _userService.GetUserByIdAsync(id);
+            if (existingUser == null) return NotFound();
+
             try
             {
-
-                await _UserService.UpdateUserAsync(UserId, Name, Email, Password, user);
+                await _userService.UpdateUserAsync(id, name, email, password, userTypeId);
                 return StatusCode(StatusCodes.Status200OK, ("Updated Successfully"));
             }
             catch (Exception e)
@@ -88,27 +124,28 @@ namespace SGME.Controllers
             }
         }
 
-        [HttpDelete("{UserId}")]
+        // Delete a user
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
 
-        public async Task<ActionResult> DeleteUser(int UserId)
+        public async Task<IActionResult> SoftDeleteUser(int id)
         {
-            var Content = await _UserService.GetUserByIdSync(UserId);
-            if (Content == null)
-                return NotFound();
+            var user = await _userService.GetUserByIdAsync(id);
+            if (user == null) return NotFound();
+
 
             try
             {
-                await _UserService.DeleteUserAsync(UserId);
+                await _userService.SoftDeleteUserAsync(id);
                 return StatusCode(StatusCodes.Status200OK, ("Deleted Successfully"));
             }
             catch (Exception e)
             {
                 return StatusCode(404, e?.Message);
             }
-
         }
+
     }
 }

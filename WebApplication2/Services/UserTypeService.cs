@@ -6,12 +6,10 @@ namespace SGME.Services
     public interface IUserTypeService
     {
         Task<IEnumerable<UserType>> GetAllUserTypeAsync();
-        Task<UserType> GetUserTypeByIdAsync(int UserTypeId);
-        Task CreateUserTypeAsync(string Name, string UserTypeName, string UserTypeDescription, UserType userType);
-        Task UpdateUserTypeAsync(int UserTypeId, string Name, string UserTypeName, string UserTypeDescription, UserType userType);
-        Task DeleteUserTypeAsync(int UserTypeIdd);
-
-        
+        Task<UserType> GetUserTypeByIdAsync(int id);
+        Task CreateUserTypeAsync(string name);
+        Task UpdateUserTypeAsync(int id, string name);
+        Task SoftDeleteUserTypeAsync(int id);
     }
 
     public class UserTypeService : IUserTypeService
@@ -33,21 +31,32 @@ namespace SGME.Services
             return await _userTypeRepository.GetUserTypeByIdAsync(UserTypeId);
         }
 
-        public async Task CreateUserTypeAsync(string Name, string UserTypeName, string UserTypeDescription, UserType userType)
+        public async Task CreateUserTypeAsync(string name)
         {
-            await _userTypeRepository.CreateUserTypeAsync(Name, UserTypeName, UserTypeDescription, userType);
+            await _userTypeRepository.CreateUserTypeAsync(name);
         }
 
-        public async Task UpdateUserTypeAsync(int UserTypeId, string Name, string UserTypeName, string UserTypeDescription, UserType userType)
+        public async Task UpdateUserTypeAsync(int id, string name)
         {
-            await _userTypeRepository.UpdateUserTypeAsync(UserTypeId, Name, UserTypeName, UserTypeDescription, userType);
+
+            try
+            {
+                await _userTypeRepository.UpdateUserTypeAsync(id, name);
+
+            }
+            catch (Exception e)
+            {
+
+                throw;
+
+            }
         }
 
-        public async Task DeleteUserTypeAsync(int UserTypeId)
+        public async Task SoftDeleteUserTypeAsync(int id)
         {
-            await _userTypeRepository.DeleteUserTypeAsync(UserTypeId);
+            await _userTypeRepository.SoftDeleteUserTypeAsync(id);
         }
 
-       
+
     }
 }

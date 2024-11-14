@@ -5,7 +5,6 @@ namespace SGME.Model
 {
     public class User
     {
-        [Key]
         public int Id { get; set; }
 
         public required string Name { get; set; }
@@ -14,15 +13,9 @@ namespace SGME.Model
 
         public required string Password { get; set; }
 
-        public required DateTime Date { get; set; }
-
         public bool IsDeleted { get; set; } = false;
 
         public virtual required UserType UserType { get; set; }
-
-
-        public required ICollection<ContentUser> ContentUsers { get; set; }
-
-
+        public object ContentUsers { get; set; }
     }
 }

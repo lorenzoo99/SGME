@@ -29,6 +29,7 @@ namespace WebApplication2.Context
             modelBuilder.Entity<User>()
                 .HasKey(u => u.Id);
 
+            modelBuilder.Entity<UserType>().HasKey(u => u.Id);
 
             modelBuilder.Entity<PermissionPerUserType>()
                    .HasKey(p => new { p.UserTypeID, p.PermissionID });
@@ -45,10 +46,7 @@ namespace WebApplication2.Context
             modelBuilder.Entity<Content>()
                 .HasKey(c => c.ContentID);
 
-            modelBuilder.Entity<PermissionPerUserType>()
-                .HasOne(pt => pt.UserType)
-                .WithMany(ut => ut.PermissionPerUserType)
-                .HasForeignKey(pt => pt.UserTypeID);
+            modelBuilder.Entity<PermissionPerUserType>().HasKey(u => u.Id);
 
             modelBuilder.Entity<PermissionPerUserType>()
                 .HasOne(pt => pt.Permission)
@@ -59,11 +57,7 @@ namespace WebApplication2.Context
                 .HasKey(cu => cu.ContentUserID);
 
             // Configurar relaciones en el modelo
-            modelBuilder.Entity<ContentUser>()
-                .HasOne(cu => cu.User)
-                .WithMany( u => u.ContentUsers)
-                .HasForeignKey(cu => cu.UserID);
-          
+            modelBuilder.Entity<ContentUser>();
 
             modelBuilder.Entity<ContentUser>()
                 .HasOne(cu => cu.Contents)

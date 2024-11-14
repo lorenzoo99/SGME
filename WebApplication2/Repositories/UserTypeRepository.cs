@@ -7,11 +7,11 @@ namespace SGME.Repositories
     public interface IUserTypeRepository
     {
         Task<IEnumerable<UserType>> GetAllUserTypesAsync();
-        Task<UserType> GetUserTypeByIdAsync(int TypeId);
-        Task CreateUserTypeAsync(string Name, string UserTypeName, string UserTypeDescription, UserType userType);
-        Task UpdateUserTypeAsync(int UserTypeId, string Name, string UserTypeName, string UserTypeDescription, UserType userType);
-        Task DeleteUserTypeAsync(int UserTypeId);
-        
+        Task<UserType> GetUserTypeByIdAsync(int id);
+        Task CreateUserTypeAsync(string name);
+        Task UpdateUserTypeAsync(int id, string name);
+        Task SoftDeleteUserTypeAsync(int id);
+
     }
 
     public class UserTypeRepository : IUserTypeRepository
@@ -30,41 +30,53 @@ namespace SGME.Repositories
                 .ToListAsync();
         }
 
-        public async Task<UserType> GetUserTypeByIdAsync(int UserTypeId)
+        public async Task<UserType> GetUserTypeByIdAsync(int id)
         {
             return await _context.UserTypes
-                .FirstOrDefaultAsync(ut => ut.Id == UserTypeId && !ut.IsDeleted);
+                .FirstOrDefaultAsync(ut => ut.Id == id && !ut.IsDeleted);
         }
 
-        public async Task CreateUserTypeAsync(string Name, string UserTypeName, string UserTypeDescription, UserType userType)
+        public async Task CreateUserTypeAsync(string name)
         {
-            try
+            var userType = new UserType
             {
-                await _context.UserTypes.AddAsync(userType);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                throw; // Manejo de excepción opcional
-            }
-        }
+                UserTypeName = name,
+            };
 
-        public async Task UpdateUserTypeAsync(int UserTypeId, string Name, string UserTypeName, string UserTypeDescription, UserType userType)
-        {
-            _context.UserTypes.Update(userType);
+            await _context.UserTypes.AddAsync(userType);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteUserTypeAsync(int UserTypeId)
+
+        public async Task UpdateUserTypeAsync(int id, string name)
         {
-            var userType = await _context.UserTypes.FindAsync(UserTypeId);
-            if (userType != null)
+            var userType = await _context.UserTypes.FindAsync(id) ?? throw new Exception("UserType not found");
+
+            userType.UserTypeName = name;
+
+            try
             {
-                userType.IsDeleted = true; // Soft delete
+                _context.UserTypes.Update(userType);
                 await _context.SaveChangesAsync();
+
+            }
+            catch (Exception e)
+            {
+
+                throw;
+
             }
         }
+        public async Task SoftDeleteUserTypeAsync(int id)
+        {
+            var usertype = await _context.UserTypes.FindAsync(id);
+            if (usertype != null)
+            {
+                usertype.IsDeleted = true;
+                await _context.SaveChangesAsync();
+            }
 
-  
+        }
+
     }
 }
