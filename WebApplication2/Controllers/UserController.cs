@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DSS.DTOs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using SGME.Model;
@@ -47,13 +48,13 @@ namespace SGME.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public async Task<ActionResult> CreateUser(string Name, string Email, string Password, User user)
+        public async Task<ActionResult> CreateUser(string Name, string Email, string Password, DateTime Date,int UserTypeId )
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             try
             {
-                await _UserService.CreateUserAsync(Name, Email, Password, user);
+                await _UserService.CreateUserAsync(Name,Email,Password,Date,UserTypeId);
             }
             catch (Exception ex)
             {
@@ -63,7 +64,24 @@ namespace SGME.Controllers
 
             return StatusCode(StatusCodes.Status201Created, "User created");
         }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);  // Si los datos no son válidos
+            }
 
+            var user = await _UserService.LoginAsync(loginDto.Email, loginDto.Password);
+
+            if (user == null)
+            {
+                return Unauthorized("Credenciales inválidas.");
+            }
+
+            // Aquí podrías generar un token JWT o similar, pero por ahora retornamos los datos del usuario
+            return Ok(new { message = "Inicio de sesión exitoso", userId = user.Id });
+        }
 
         [HttpPut("{UserId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -79,7 +97,7 @@ namespace SGME.Controllers
             try
             {
 
-                await _UserService.UpdateUserAsync(UserId, Name, Email, Password, user);
+                await _UserService.UpdateUserAsync(user);
                 return StatusCode(StatusCodes.Status200OK, ("Updated Successfully"));
             }
             catch (Exception e)

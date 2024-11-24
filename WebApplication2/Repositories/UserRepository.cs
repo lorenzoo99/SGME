@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DSS.DTOs;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using SGME.Model;
 using WebApplication2.Context;
 
@@ -6,13 +9,19 @@ namespace SGME.Repositories
 {
     public interface IUserRepository
     {
-        Task<IEnumerable<User>> GetAllUserAsync();
-        Task<User> GetUserByIdAsync(int UserId);
-        Task CreateUserAsync(string Name, string Email, string Password, User user);
-        Task UpdateUserAsync(int UserId, string Name, string Email, string Password, User user);
-        Task DeleteUserAsync(int Userid);
-        
+
+        Task<IEnumerable<User>> GetAllUsersAsync();
+        Task<User?> GetUserByIdAsync(int userId);
+        Task<User?> GetUserByEmailAsync(string email);
+        Task CreateUserAsync(string Name, string Email, string Password, DateTime Date, int UserTypeId);
+        Task UpdateUserAsync(User user);
+        Task SoftDeleteUserAsync(int userId);
+
+
+
     }
+
+
 
     public class UserRepository : IUserRepository
     {
@@ -23,48 +32,59 @@ namespace SGME.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<User>> GetAllUserAsync()
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             return await _context.Users
-                .Where(u => !u.IsDeleted) // Excluye los eliminados
+                .AsNoTracking()
+                .Where(u => !u.IsDeleted)
                 .ToListAsync();
         }
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<User?> GetUserByIdAsync(int userId)
         {
             return await _context.Users
-                .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted);
         }
 
-        public async Task CreateUserAsync(string Name, string Email, string Password, User user)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
-            try
-            {
-                await _context.Users.AddAsync(user);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                throw; // Manejo de excepción opcional
-            }
+            return await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Email == email && !u.IsDeleted);
         }
 
-        public async Task UpdateUserAsync(int UserId, string Name, string Email, string Password, User user)
+        public async Task CreateUserAsync(string Name, string Email, string Password, DateTime Date, int UserTypeId)
+        {
+            var userType = await _context.UserTypes.FindAsync(UserTypeId) ?? throw new Exception("UserType not found");
+            var user = new User
+            {
+                Name = Name,
+                Email = Email,
+                Password = Password,
+                Date = Date,
+                UserType = userType,
+                ContentUsers = null,
+            };
+            
+
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateUserAsync(User user)
         {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteUserAsync(int id)
+        public async Task SoftDeleteUserAsync(int userId)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
-            {
-                user.IsDeleted = true; // Soft delete
-                await _context.SaveChangesAsync();
-            }
-        }
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null) throw new KeyNotFoundException("User not found");
 
-        
+            user.IsDeleted = true;
+            await _context.SaveChangesAsync();
+        }
     }
 }

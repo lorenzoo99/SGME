@@ -1,0 +1,140 @@
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Contenedor principal */
+.main-menu {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Encabezado */
+.header {
+    background-color: #b0c4de;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .header h1 {
+        font-size: 24px;
+        color: #333;
+    }
+
+.search-bar {
+    display: flex;
+}
+
+    .search-bar input {
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .search-bar button {
+        padding: 5px 10px;
+        margin-left: 5px;
+        background-color: #666;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+/* Contenedor principal */
+.container {
+    display: flex;
+    flex: 1;
+}
+
+/* Barra lateral */
+.sidebar {
+    background-color: #f3f3f3;
+    width: 350px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+    .sidebar .logo img {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .sidebar nav ul {
+        list-style: none;
+        padding: 0;
+    }
+
+        .sidebar nav ul li {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+    .sidebar .icon {
+        margin-right: 10px;
+        font-size: 20px;
+    }
+
+    .sidebar .profile {
+        margin-top: auto;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+    }
+
+/* Área de contenido */
+.content {
+    flex: 1;
+    padding: 20px;
+    background-color: #fff;
+}
+
+/* Pie de página */
+.footer {
+    background-color: #e0e0e0;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer-links {
+    display: flex;
+}
+
+.footer-column h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.footer-column ul {
+    list-style: none;
+}
+
+    .footer-column ul li a {
+        text-decoration: none;
+        color: #666;
+    }
+
+.footer-bottom {
+    display: flex;
+    align-items: center;
+}
+
+.footer-logo img {
+    width: 50px;
+    margin-right: 10px;
+}
+
+.footer-info p {
+    color: #333;
+}

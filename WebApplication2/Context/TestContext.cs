@@ -6,7 +6,7 @@ namespace WebApplication2.Context
 {
     public class TestContext : DbContext
     {
-        public TestContext(DbContextOptions Options) : base(Options)
+        public TestContext(DbContextOptions options) : base(options)
         {
 
         }
@@ -60,9 +60,9 @@ namespace WebApplication2.Context
 
             // Configurar relaciones en el modelo
             modelBuilder.Entity<ContentUser>()
-                .HasOne(cu => cu.User)
-                .WithMany( u => u.ContentUsers)
-                .HasForeignKey(cu => cu.UserID);
+                .HasOne(cu => cu.User);
+                
+              
           
 
             modelBuilder.Entity<ContentUser>()

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication2.Context;
 
@@ -11,9 +12,11 @@ using WebApplication2.Context;
 namespace SGME.Migrations
 {
     [DbContext(typeof(TestContext))]
-    partial class TestContextModelSnapshot : ModelSnapshot
+    [Migration("20241123200300_BaseDeDatos")]
+    partial class BaseDeDatos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,14 +227,14 @@ namespace SGME.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserTypeId")
+                    b.Property<int>("UserTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserTypeId");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("UserType", b =>
@@ -285,7 +288,7 @@ namespace SGME.Migrations
                         .IsRequired();
 
                     b.HasOne("SGME.Model.User", "User")
-                        .WithMany()
+                        .WithMany("ContentUsers")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -335,9 +338,13 @@ namespace SGME.Migrations
 
             modelBuilder.Entity("SGME.Model.User", b =>
                 {
-                    b.HasOne("UserType", null)
+                    b.HasOne("UserType", "UserType")
                         .WithMany("Users")
-                        .HasForeignKey("UserTypeId");
+                        .HasForeignKey("UserTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserType");
                 });
 
             modelBuilder.Entity("SGME.Model.Content", b =>
@@ -353,6 +360,11 @@ namespace SGME.Migrations
             modelBuilder.Entity("SGME.Model.Platform", b =>
                 {
                     b.Navigation("Contents");
+                });
+
+            modelBuilder.Entity("SGME.Model.User", b =>
+                {
+                    b.Navigation("ContentUsers");
                 });
 
             modelBuilder.Entity("UserType", b =>

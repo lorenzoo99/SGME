@@ -31,8 +31,7 @@ builder.Services.AddScoped<IUserTypeService, UserTypeService>();
 builder.Services.AddScoped<IUsageHistoryRepository, UsageHistoryRepository>();
 builder.Services.AddScoped<IUsageHistoryService, UsageHistoryService>();
 
-builder.Services.AddScoped<IRecordRepository, RecordRepository>();
-builder.Services.AddScoped<IRecordService, RecordService>();
+
 
 builder.Services.AddScoped<IPlatformRepository, PlatformRepository>();
 builder.Services.AddScoped<IPlatformService, PlatformService>();
@@ -49,8 +48,7 @@ builder.Services.AddScoped<IContentUserService, ContentUserService>();
 builder.Services.AddScoped<IContentRepository, ContentRepository>();
 builder.Services.AddScoped<IContentService, ContentService>();
 
-builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
-builder.Services.AddScoped<ICommentsService, CommentsService>();
+
 
 
 var app = builder.Build();

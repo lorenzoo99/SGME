@@ -1,0 +1,280 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.logo img {
+    width: 200px;
+}
+
+.logoC img.icon {
+    width: 30px;
+    transform: translateY(10px);
+}
+
+.logoP img.icon {
+    width: 30px;
+    transform: translateY(5px);
+}
+
+.logoA img.icon {
+    width: 30px;
+}
+
+.line {
+    width: 100%;
+    height: 2px; /* Grosor central de la l�nea */
+    background: linear-gradient(to right, transparent, #888, transparent);
+    margin: 20px 0;
+}
+
+.back-button img {
+    width: 30px;
+    transform: translateY(10px);
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+}
+
+/* Encabezado */
+.header {
+    background-color: #6EA7E1;
+    padding: 20px;
+    text-align: center;
+    color: rgb(0, 0, 0);
+}
+
+/* Estructura principal */
+.main-container {
+    display: flex;
+    min-height: calc(100vh - 60px);
+}
+
+/* Barra lateral */
+.sidebar {
+    width: 250px;
+    background-color: #F0F0F0;
+    padding: 30px;
+}
+
+    .sidebar .logo {
+        margin-bottom: 40px;
+    }
+
+    .sidebar ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+
+        .sidebar ul li {
+            margin-bottom: 300px;
+        }
+
+            .sidebar ul li a {
+                text-decoration: none;
+                color: #333;
+                font-size: 18px;
+            }
+
+.back-button {
+    margin-top: 20px;
+}
+
+    .back-button button {
+        padding: 10px;
+        width: 50%;
+        background-color: #F0F0F0;
+        border: none;
+        cursor: pointer;
+    }
+
+        .back-button button:hover {
+            background-color: #ccc;
+        }
+
+.login {
+    background-color: white;
+    padding: 20px 350px;
+}
+
+.login-actions {
+    display: flex;
+    align-items: center;
+}
+
+    .login-actions a {
+        font-size: 10px;
+        padding: 20px 70px;
+    }
+
+    .login-actions button {
+        margin-left: 20px;
+        padding: 8px 2px;
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+.register {
+    background-color: white;
+    padding: 20px 350px;
+}
+
+.form-groupR {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+    .form-groupR label {
+        width: 150px;
+        margin-right: 10px;
+        text-align: right;
+    }
+
+
+    .form-groupR select {
+        flex: 1;
+        padding: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+.terms {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+    .terms label {
+        margin-left: 10px;
+    }
+
+.remember {
+    display: flex;
+    padding: 20px 190px;
+}
+
+.rememberT {
+    display: flex;
+    margin-left: 20px;
+}
+
+.remember input {
+    margin-right: 80px;
+    margin-left: -80px;
+}
+/* Contenido */
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+    .form-group label {
+        margin-right: 10px;
+        white-space: nowrap;
+        width: 100px;
+    }
+
+    .form-group input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+form {
+    background-color: #F0F0F0;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+    border: 2px solid #101111;
+    border-radius: 8px;
+}
+
+    form label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    form input, form select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    form button {
+        width: 100%;
+        padding: 10px;
+        background-color: #6EA7E1;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+        form button:hover {
+            background-color: #5a96c8;
+        }
+
+.social {
+    width: 48%;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+/* Pie de p�gina */
+.footer {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+    .footer .footer-links {
+        display: flex;
+        justify-content: space-around;
+    }
+
+.footer-links div {
+    text-align: left;
+}
+
+.footer-links h4 {
+    margin-bottom: 10px;
+}
+
+.footer-links ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+    .footer-links ul li {
+        margin-bottom: 5px;
+    }
+
+        .footer-links ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+            .footer-links ul li a:hover {
+                text-decoration: underline;
+            }
+
